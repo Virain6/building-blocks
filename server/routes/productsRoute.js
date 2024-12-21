@@ -32,4 +32,32 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.get("/latest/:limit", async (req, res) => {
+  try {
+    const limit = parseInt(req.params.limit, 10); // Get the limit from the route parameter
+    if (isNaN(limit) || limit <= 0) {
+      return res.status(400).json({ error: "Invalid limit parameter" });
+    }
+    const latestProducts = await client.query(api.products.getLatestProducts, {
+      limit,
+    });
+    console.log("Latest products fetched:", latestProducts);
+    res.json(latestProducts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch latest products" });
+  }
+});
+
+router.post("/migrateDates", async (req, res) => {
+  try {
+    const result = await client.mutation(api.products.migrateDatesToTimestamps);
+    console.log("Migration result:", result);
+    res.status(200).json({ message: result });
+  } catch (error) {
+    console.error("Error running migration:", error);
+    res.status(500).json({ error: "Failed to run migration" });
+  }
+});
+
 export default router;
