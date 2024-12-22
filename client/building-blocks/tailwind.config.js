@@ -5,6 +5,7 @@ export default {
     extend: {
       animation: {
         text: "text 5s ease infinite",
+        "slow-pan": "pan 90s linear infinite",
       },
       keyframes: {
         text: {
@@ -17,6 +18,18 @@ export default {
             "background-position": "right center",
           },
         },
+        pan: {
+          "0%": { backgroundPosition: "0% 0%" },
+          "100%": { backgroundPosition: "0% 100%" },
+        },
+      },
+      backgroundImage: {
+        "tool-pattern": "url('/src/public/images/tool-pattern.svg')", // Path to the SVG
+      },
+      backgroundSize: {
+        small: "20px 20px",
+        medium: "50px 50px",
+        large: "100px 100px",
       },
     },
   },

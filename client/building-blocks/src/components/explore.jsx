@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { fetchProducts } from "../utils/productsApi";
-import ProductCard from "./productCard";
+import { fetchLatestProducts } from "../utils/productsApi"; // Correct function
+import ScrollableProductList from "./scrollable";
 
 const Explore = () => {
   const [products, setProducts] = useState([]);
@@ -9,7 +9,7 @@ const Explore = () => {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const data = await fetchLatestProducts(5);
+        const data = await fetchLatestProducts(3); // Load first 3 products
         setProducts(data);
         setLoading(false);
       } catch (error) {
@@ -25,18 +25,27 @@ const Explore = () => {
     return <div className="text-center text-gray-500">Loading products...</div>;
   }
 
+  const handleViewMore = () => {
+    alert("Navigate to more products");
+  };
+
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold text-center mb-8">Our Products</h1>
-      {products.length === 0 ? (
-        <p className="text-center text-gray-600">No products available.</p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {products.map((product) => (
-            <ProductCard key={product._id} product={product} />
-          ))}
-        </div>
-      )}
+      <h1 className="text-5xl font-bold text-center mb-8 mt-3">Explore</h1>
+      <hr></hr>
+      {/* Tools Section */}
+      <ScrollableProductList
+        products={products}
+        title="Tools"
+        onViewMore={handleViewMore}
+      />
+      <hr></hr>
+      {/* Hardware Section */}
+      <ScrollableProductList
+        products={products}
+        title="Hardware"
+        onViewMore={handleViewMore}
+      />
     </div>
   );
 };

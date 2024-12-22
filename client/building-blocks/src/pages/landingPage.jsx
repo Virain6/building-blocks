@@ -2,19 +2,22 @@ import React from "react";
 import SearchBar from "../components/searchBar";
 import GlowBox from "../components/glowBox";
 import Explore from "../components/explore";
+import CompanyList from "../components/companies";
 
 const LandingPage = () => {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Hero Section */}
       <div
-        className="bg-gray-900 text-amber-500 flex flex-col justify-center items-center"
-        style={{ height: "calc(100vh - 4rem)" }}
+        className=" bg-tool-pattern bg-repeat bg-gray-900 animate-slow-pan text-amber-500 flex flex-col justify-center items-center"
+        style={{ height: "calc(100vh - 3rem)" }}
       >
         <div class="flex items-center space-x-2">
-          <h1 className="text-4xl font-bold mb-4">Welcome to</h1>
+          <h1 className="text-5xl font-bold mb-4 sm:text-6xl md:text-7xl">
+            Welcome to{" "}
+          </h1>
           <h1
-            class="text-4xl font-bold mb-4
+            class="text-5xl md:text-7xl sm:text-6xl font-bold mb-4
             bg-gradient-to-r bg-clip-text  text-transparent 
             from-amber-500 via-orange-600 to-yellow-500
             animate-text
@@ -23,19 +26,36 @@ const LandingPage = () => {
             BLOCKS
           </h1>
         </div>
-        <p className="text-lg mb-6">
-          Find the best products at unbeatable prices.
+        <p className="text-m mb-6 sm:text-lg">
+          View our wide ranges of construction products for your next project
         </p>
-        <SearchBar />
+        <div className="w-full max-w-sm sm:max-w-lg md:max-w-xl lg:max-w-2xl">
+          <SearchBar />
+        </div>
       </div>
 
       {/* How It Works Section */}
       <GlowBox />
+      <div
+        className="container mx-auto text-center"
+        style={{ width: "calc(100vw - 3rem)" }}
+      >
+        <hr className="" />
+      </div>
 
-      <Explore />
+      {/* Companies Section */}
+      <div className="bg-gray-100 py-12">
+        <CompanyList />
+      </div>
+
+      {/* Explore Section */}
+
+      <div className="bg-white py-12">
+        <Explore />
+      </div>
 
       {/* Description Section */}
-      <div className="bg-white py-12">
+      <div className="bg-gray-100 py-12 pt-8">
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-bold mb-6">About Us</h2>
           <p className="text-gray-700 max-w-2xl mx-auto">

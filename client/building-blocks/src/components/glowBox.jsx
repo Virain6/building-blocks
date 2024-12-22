@@ -24,11 +24,11 @@ const GlowBox = () => {
     >
       <div className="container mx-auto text-center">
         <h2 className="text-3xl font-bold mb-6">How It Works</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:px-4">
           {["Browse", "Order", "Pick Up"].map((step, index) => (
             <div
               key={index}
-              className="hover-box relative p-6 rounded-lg border border-gray-300"
+              className="hover-box relative p-6 rounded-lg border border-gray-300 sm:mx-2 mx-8"
               style={{
                 position: "relative",
                 "--x": "0px",
