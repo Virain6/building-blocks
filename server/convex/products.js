@@ -24,7 +24,6 @@ export const getLatestProducts = query(async ({ db }, { limit }) => {
 export const addProduct = mutation(async ({ db }, product) => {
   const now = Date.now(); // Get current timestamp in milliseconds
 
-  // Ensure required fields are present
   const {
     productName,
     description,
@@ -45,23 +44,21 @@ export const addProduct = mutation(async ({ db }, product) => {
   }
 
   const newProduct = {
-    productName,
-    description: description || "",
+    productName: productName.trim().toLowerCase(), // Convert to lowercase for consistency
+    description: description?.trim() || "",
     price,
     stock: stock || 0,
     departmentCode,
-    supplierID: supplierID || "",
+    supplierID: supplierID?.trim() || "",
     leadTime: leadTime || 0,
     discountPrice: discountPrice || 0,
-    status: status || "available",
-    picture: picture || "",
-    createdAt: now, // Use timestamp
-    updatedAt: now, // Use timestamp
+    status: status?.trim() || "available",
+    picture: picture?.trim() || "",
+    createdAt: now,
+    updatedAt: now,
   };
 
-  // Insert the product into the database
-  const result = await db.insert("products", newProduct);
-  return result;
+  return await db.insert("products", newProduct);
 });
 
 export const migrateDatesToTimestamps = mutation(async ({ db }) => {
@@ -88,3 +85,54 @@ export const migrateDatesToTimestamps = mutation(async ({ db }) => {
 
   return "Migration complete!";
 });
+
+export const searchByName = query(
+  async (
+    { db },
+    { searchTerm, departmentCode = null, status = null, page = 0, limit = 10 }
+  ) => {
+    if (!searchTerm) {
+      throw new Error("Search term is required");
+    }
+
+    // Normalize the searchTerm to lowercase
+    const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+
+    // Fetch all matching products
+    let query = db.query("products");
+
+    // Add department filter if provided
+    if (departmentCode) {
+      query = query.filter((q) =>
+        q.eq(q.field("departmentCode"), departmentCode)
+      );
+    }
+
+    // Add status filter if provided
+    if (status) {
+      query = query.filter((q) => q.eq(q.field("status"), status));
+    }
+
+    // Collect all results
+    const allResults = await query.collect();
+
+    // Filter results for partial matches
+    const filteredResults = allResults.filter((product) =>
+      product.productName.includes(normalizedSearchTerm)
+    );
+
+    // Apply pagination
+    const startIndex = page * limit;
+    const paginatedResults = filteredResults.slice(
+      startIndex,
+      startIndex + limit
+    );
+
+    return {
+      results: paginatedResults,
+      total: filteredResults.length, // Total number of matches
+      page,
+      limit,
+    };
+  }
+);

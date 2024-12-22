@@ -2,7 +2,7 @@ import React from "react";
 
 const CompanyList = () => {
   const companies = [
-    "Schlute Systems",
+    "Schluter Systems",
     "Moen",
     "Aria",
     "Toolway",
@@ -16,7 +16,7 @@ const CompanyList = () => {
 
   return (
     <div className="container mx-auto text-center mb-8">
-      <h2 className="text-3xl font-bold mb-6">Companies we Work With</h2>
+      <h2 className="text-3xl font-bold mb-6">Companies We Work With</h2>
       <div className="overflow-x-auto">
         <div className="flex justify-start space-x-6 items-center py-4 px-4 sm:pl-10">
           {companies.map((company, index) => (

@@ -10,7 +10,7 @@ const LandingPage = () => {
       {/* Hero Section */}
       <div
         className=" bg-tool-pattern bg-repeat bg-gray-900 animate-slow-pan text-amber-500 flex flex-col justify-center items-center"
-        style={{ height: "calc(100vh - 3rem)" }}
+        style={{ height: "calc(100vh - 7rem)" }}
       >
         <div class="flex items-center space-x-2">
           <h1 className="text-5xl font-bold mb-4 sm:text-6xl md:text-7xl">

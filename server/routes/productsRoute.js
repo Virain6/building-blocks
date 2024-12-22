@@ -20,18 +20,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Get a product by ID
-router.get("/:id", async (req, res) => {
-  try {
-    const productId = req.params.id;
-    const product = await client.query(api.products.getById, { productId });
-    res.json(product);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to fetch product by ID" });
-  }
-});
-
 router.get("/latest/:limit", async (req, res) => {
   try {
     const limit = parseInt(req.params.limit, 10); // Get the limit from the route parameter
@@ -60,4 +48,29 @@ router.post("/migrateDates", async (req, res) => {
   }
 });
 
+router.get("/searchByName", async (req, res) => {
+  const { q, departmentCode, status, page = 0, limit = 10 } = req.query;
+
+  if (!q) {
+    return res.status(400).json({ error: "Search term (q) is required" });
+  }
+
+  try {
+    const results = await client.query(api.products.searchByName, {
+      searchTerm: q,
+      departmentCode,
+      status,
+      page: parseInt(page, 10),
+      limit: parseInt(limit, 10),
+    });
+    res.json(results);
+  } catch (error) {
+    console.error(
+      "Error fetching products by name:",
+      error.message,
+      error.stack
+    );
+    res.status(500).json({ error: "Failed to fetch products by name" });
+  }
+});
 export default router;
