@@ -48,18 +48,22 @@ router.post("/migrateDates", async (req, res) => {
   }
 });
 
-router.get("/searchByName", async (req, res) => {
-  const { q, departmentCode, status, page = 0, limit = 10 } = req.query;
-
-  if (!q) {
-    return res.status(400).json({ error: "Search term (q) is required" });
-  }
+router.get("/search", async (req, res) => {
+  const {
+    q,
+    departmentCode,
+    status,
+    supplierID,
+    page = 0,
+    limit = 10,
+  } = req.query;
 
   try {
     const results = await client.query(api.products.searchByName, {
       searchTerm: q,
       departmentCode,
       status,
+      supplierID, // Pass supplierID to the query
       page: parseInt(page, 10),
       limit: parseInt(limit, 10),
     });

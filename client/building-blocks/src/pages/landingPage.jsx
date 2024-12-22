@@ -12,12 +12,12 @@ const LandingPage = () => {
         className=" bg-tool-pattern bg-repeat bg-gray-900 animate-slow-pan text-amber-500 flex flex-col justify-center items-center"
         style={{ height: "calc(100vh - 7rem)" }}
       >
-        <div class="flex items-center space-x-2">
+        <div className="flex items-center space-x-2">
           <h1 className="text-5xl font-bold mb-4 sm:text-6xl md:text-7xl">
             Welcome to{" "}
           </h1>
           <h1
-            class="text-5xl md:text-7xl sm:text-6xl font-bold mb-4
+            className="text-5xl md:text-7xl sm:text-6xl font-bold mb-4
             bg-gradient-to-r bg-clip-text  text-transparent 
             from-amber-500 via-orange-600 to-yellow-500
             animate-text

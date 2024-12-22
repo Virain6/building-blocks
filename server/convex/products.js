@@ -89,16 +89,19 @@ export const migrateDatesToTimestamps = mutation(async ({ db }) => {
 export const searchByName = query(
   async (
     { db },
-    { searchTerm, departmentCode = null, status = null, page = 0, limit = 10 }
-  ) => {
-    if (!searchTerm) {
-      throw new Error("Search term is required");
+    {
+      searchTerm = "",
+      departmentCode = null,
+      supplierID = null,
+      status = null,
+      page = 0,
+      limit = 10,
     }
-
-    // Normalize the searchTerm to lowercase
+  ) => {
+    // Normalize the searchTerm to lowercase if provided
     const normalizedSearchTerm = searchTerm.trim().toLowerCase();
 
-    // Fetch all matching products
+    // Start building the query
     let query = db.query("products");
 
     // Add department filter if provided
@@ -113,13 +116,21 @@ export const searchByName = query(
       query = query.filter((q) => q.eq(q.field("status"), status));
     }
 
-    // Collect all results
+    // Add supplierID filter if provided
+    if (supplierID) {
+      query = query.filter((q) => q.eq(q.field("supplierID"), supplierID));
+    }
+
+    // Collect all results from the database
     const allResults = await query.collect();
 
-    // Filter results for partial matches
-    const filteredResults = allResults.filter((product) =>
-      product.productName.includes(normalizedSearchTerm)
-    );
+    // Filter results for partial matches if a search term is provided
+    let filteredResults = allResults;
+    if (normalizedSearchTerm) {
+      filteredResults = allResults.filter((product) =>
+        product.productName.toLowerCase().includes(normalizedSearchTerm)
+      );
+    }
 
     // Apply pagination
     const startIndex = page * limit;

@@ -21,19 +21,22 @@ export const fetchLatestProducts = async (limit) => {
 
 export const searchProducts = async ({
   searchTerm = "",
-  department = null,
+  departmentCode = null,
+  supplierID = null,
   status = null,
   page = 0,
   limit = 20,
 }) => {
   const params = {
     q: searchTerm,
-    department,
+    departmentCode,
+    supplierID,
     status,
     page,
     limit,
   };
 
+  console.log("Search parameters:", params); // Debugging log
   const response = await axios.get("/products/search", { params });
   console.log("Search response:", response.data); // Debugging response
   return response.data;

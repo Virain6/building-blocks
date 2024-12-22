@@ -1,4 +1,5 @@
 import React from "react";
+import { capitalizeWords } from "../utils/stringUtils.js";
 
 const ProductCard = ({ product }) => {
   return (
@@ -8,7 +9,9 @@ const ProductCard = ({ product }) => {
         alt={product.productName}
         className="h-40 w-full object-cover rounded-md mb-4"
       />
-      <h2 className="text-xl font-semibold">{product.productName}</h2>
+      <h2 className="text-xl font-semibold">
+        {capitalizeWords(product.productName)}
+      </h2>
       <h3 className="text-gray-600">{product.departmentCode}</h3>
       <p className="text-gray-600 mt-2 h-14 overflow-hidden">
         {product.description}

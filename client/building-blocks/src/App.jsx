@@ -12,8 +12,8 @@ function App() {
       <div className="min-h-screen flex flex-col">
         <Navbar />
         <Routes>
-          <Route path="/nn" element={<LandingPage />} />
-          <Route path="/" element={<ProductSearch />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/search" element={<ProductSearch />} />
         </Routes>
         <Footer />
       </div>
