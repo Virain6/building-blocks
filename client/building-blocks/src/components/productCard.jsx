@@ -1,9 +1,15 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { capitalizeWords } from "../utils/stringUtils.js";
 
 const ProductCard = ({ product }) => {
+  const navigate = useNavigate();
+
   return (
-    <div className="border rounded-lg p-4 shadow hover:shadow-lg transition">
+    <div
+      onClick={() => navigate(`/product/${product._id}`)} // Navigate to details page
+      className="border rounded-lg p-4 shadow hover:shadow-lg transition cursor-pointer"
+    >
       <img
         src={product.picture || "https://via.placeholder.com/150"}
         alt={product.productName}
@@ -12,7 +18,10 @@ const ProductCard = ({ product }) => {
       <h2 className="text-xl font-semibold">
         {capitalizeWords(product.productName)}
       </h2>
-      <h3 className="text-gray-600">{product.departmentCode}</h3>
+      <h3 className="text-gray-600">
+        {product.supplierName || "Unknown Supplier"} -{" "}
+        {product.departmentName || "Unknown Department"}
+      </h3>
       <p className="text-gray-600 mt-2 h-14 overflow-hidden">
         {product.description}
       </p>

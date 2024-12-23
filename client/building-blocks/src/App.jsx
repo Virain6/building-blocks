@@ -5,6 +5,7 @@ import Navbar from "./components/navbar";
 import LandingPage from "./pages/landingPage";
 import Footer from "./components/footer";
 import ProductSearch from "./pages/searchPage";
+import ProductDetails from "./pages/productPage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/search" element={<ProductSearch />} />
+          <Route path="/product/:productId" element={<ProductDetails />} />
         </Routes>
         <Footer />
       </div>

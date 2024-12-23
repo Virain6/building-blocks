@@ -20,4 +20,39 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/:departmentCode", async (req, res) => {
+  const { departmentCode } = req.params;
+
+  try {
+    // Ensure departmentCode is provided
+    if (!departmentCode) {
+      return res.status(400).json({ error: "departmentCode is required" });
+    }
+
+    // Fetch products by departmentCode
+    const results = await client.query(api.department.getByDepartmentCode, {
+      departmentCode,
+    });
+
+    // If no results are found, return a 404 error
+    if (!results || results.length === 0) {
+      return res
+        .status(404)
+        .json({ error: "No products found for this department code" });
+    }
+
+    // Return the fetched products
+    res.json(results);
+  } catch (error) {
+    console.error(
+      "Error fetching products by department code:",
+      error.message,
+      error.stack
+    );
+    res
+      .status(500)
+      .json({ error: "Failed to fetch products by department code" });
+  }
+});
+
 export default router;

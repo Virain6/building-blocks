@@ -1,9 +1,45 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { capitalizeWords } from "../utils/stringUtils.js";
+import { fetchSuppliersById } from "../utils/supplierApi.js";
+import { fetchDepartmentByCode } from "../utils/departmentApi.js";
 
 const MobileProductCard = ({ product }) => {
+  const [supplier, setSupplier] = useState({});
+  const [department, setDepartment] = useState({});
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchSupplier = async () => {
+      try {
+        const fetchedSupplier = await fetchSuppliersById(product.supplierID);
+        setSupplier(fetchedSupplier);
+      } catch (error) {
+        console.error("Error fetching supplier by ID:", error);
+      }
+    };
+
+    const fetchDepartment = async () => {
+      try {
+        const fetchedDepartment = await fetchDepartmentByCode(
+          product.departmentCode
+        );
+        setDepartment(fetchedDepartment[0] || {});
+      } catch (error) {
+        console.error("Error fetching department by code:", error);
+      }
+    };
+
+    fetchSupplier();
+    fetchDepartment();
+  }, [product]);
+
   return (
-    <div className="flex items-center border rounded-lg p-4 shadow hover:shadow-lg transition space-x-4">
+    <div
+      onClick={() => navigate(`/product/${product._id}`)} // Navigate to details page
+      className="flex items-center border rounded-lg p-4 shadow hover:shadow-lg transition space-x-4"
+    >
       {/* Product Image */}
       <img
         src={product.picture || "https://via.placeholder.com/100"}
@@ -15,7 +51,10 @@ const MobileProductCard = ({ product }) => {
         <h2 className="text-lg font-semibold">
           {capitalizeWords(product.productName)}
         </h2>
-        <h3 className="text-sm text-gray-600">{product.departmentCode}</h3>
+        <h3 className="text-sm text-gray-600">
+          {supplier.supplierName || "Unknown Supplier"} -{" "}
+          {department.departmentName || "Unknown Department"}
+        </h3>
         <p className="text-sm text-gray-600 mt-1 line-clamp-2">
           {product.description}
         </p>

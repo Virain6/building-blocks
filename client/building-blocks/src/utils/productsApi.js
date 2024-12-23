@@ -6,7 +6,7 @@ export const fetchProducts = async () => {
 };
 
 export const fetchProductById = async (id) => {
-  const response = await axios.get(`/products/${id}`);
+  const response = await axios.get(`/products/searchID/${id}`);
   return response.data;
 };
 

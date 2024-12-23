@@ -10,3 +10,9 @@ export const fetchDepartments = async () => {
     throw error;
   }
 };
+
+export const fetchDepartmentByCode = async (departmentCode) => {
+  const response = await axios.get(`/department/${departmentCode}`);
+  console.log("bycode" + response.data + " : " + departmentCode);
+  return response.data;
+};

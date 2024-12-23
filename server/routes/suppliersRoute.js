@@ -20,4 +20,19 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Get a supplier by ID
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const supplier = await client.query(api.suppliers.getById, { id });
+    if (!supplier) {
+      return res.status(404).json({ error: "Supplier not found" });
+    }
+    res.json(supplier);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch supplier by ID" });
+  }
+});
+
 export default router;

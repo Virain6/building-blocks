@@ -4,8 +4,17 @@ export const getAll = query(async ({ db }) => {
   return await db.query("products").collect();
 });
 
-export const getById = query(async ({ db }, { productId }) => {
-  return await db.get("products", productId);
+export const getById = query(async ({ db }, { id }) => {
+  if (!id) {
+    throw new Error("ID is required to fetch a document");
+  }
+
+  const product = await db.get(id);
+  if (!product) {
+    throw new Error(`No product found with ID: ${id}`);
+  }
+
+  return product;
 });
 
 export const getLatestProducts = query(async ({ db }, { limit }) => {

@@ -15,8 +15,22 @@ router.get("/", async (req, res) => {
     const products = await client.query(api.products.getAll);
     res.json(products);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Failed to fetch products" });
+  }
+});
+
+// Get a product by ID
+router.get("/searchID/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const product = await client.query(api.products.getById, { id });
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+    res.json(product);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch product by ID" });
   }
 });
 
@@ -29,10 +43,8 @@ router.get("/latest/:limit", async (req, res) => {
     const latestProducts = await client.query(api.products.getLatestProducts, {
       limit,
     });
-    console.log("Latest products fetched:", latestProducts);
     res.json(latestProducts);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Failed to fetch latest products" });
   }
 });
@@ -40,10 +52,8 @@ router.get("/latest/:limit", async (req, res) => {
 router.post("/migrateDates", async (req, res) => {
   try {
     const result = await client.mutation(api.products.migrateDatesToTimestamps);
-    console.log("Migration result:", result);
     res.status(200).json({ message: result });
   } catch (error) {
-    console.error("Error running migration:", error);
     res.status(500).json({ error: "Failed to run migration" });
   }
 });
@@ -69,11 +79,6 @@ router.get("/search", async (req, res) => {
     });
     res.json(results);
   } catch (error) {
-    console.error(
-      "Error fetching products by name:",
-      error.message,
-      error.stack
-    );
     res.status(500).json({ error: "Failed to fetch products by name" });
   }
 });
