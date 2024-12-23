@@ -49,12 +49,18 @@ router.get("/latest/:limit", async (req, res) => {
   }
 });
 
-router.post("/migrateDates", async (req, res) => {
+router.post("/add", async (req, res) => {
+  const productData = req.body; // Get product data from the request body
+
   try {
-    const result = await client.mutation(api.products.migrateDatesToTimestamps);
-    res.status(200).json({ message: result });
+    const addedProduct = await client.mutation(
+      api.products.addProduct,
+      productData
+    ); // Call Convex mutation
+    res.status(201).json(addedProduct); // Return the created product
   } catch (error) {
-    res.status(500).json({ error: "Failed to run migration" });
+    console.error("Error adding product:", error);
+    res.status(500).json({ error: "Failed to add product" }); // Handle errors
   }
 });
 

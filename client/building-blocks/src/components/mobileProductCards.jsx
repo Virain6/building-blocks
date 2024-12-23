@@ -58,7 +58,22 @@ const MobileProductCard = ({ product }) => {
         <p className="text-sm text-gray-600 mt-1 line-clamp-2">
           {product.description}
         </p>
-        <p className="text-lg font-bold mt-2">${product.price}</p>
+
+        {/* Price Section */}
+        <div className="mt-4">
+          {product.discountPrice ? (
+            <div className="mt-2">
+              <span className="text-lg font-bold text-red-500 line-through">
+                ${product.price}
+              </span>
+              <span className="text-lg font-bold text-green-600 ml-2">
+                ${product.discountPrice}
+              </span>
+            </div>
+          ) : (
+            <p className="text-lg font-bold mt-2">${product.price}</p>
+          )}
+        </div>
       </div>
     </div>
   );

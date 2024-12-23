@@ -25,7 +25,21 @@ const ProductCard = ({ product }) => {
       <p className="text-gray-600 mt-2 h-14 overflow-hidden">
         {product.description}
       </p>
-      <p className="text-lg font-bold mt-4">${product.price}</p>
+      {/* Price Section */}
+      <div className="mt-4">
+        {product.discountPrice ? (
+          <div>
+            <span className="text-lg font-bold text-red-500 line-through">
+              ${product.price}
+            </span>
+            <span className="text-lg font-bold text-green-600 ml-2">
+              ${product.discountPrice}
+            </span>
+          </div>
+        ) : (
+          <p className="text-lg font-bold">${product.price}</p>
+        )}
+      </div>
     </div>
   );
 };

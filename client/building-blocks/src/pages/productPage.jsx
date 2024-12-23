@@ -60,7 +60,18 @@ const ProductDetails = () => {
             {supplier.supplierName || "Unknown Supplier"} -{" "}
             {department.departmentName || "Unknown Department"}
           </h2>
-          <p className="text-2xl font-bold mt-6">${product.price}</p>
+          {product.discountPrice ? (
+            <div className="mt-6">
+              <span className="text-2xl font-bold text-red-500 line-through">
+                ${product.price}
+              </span>
+              <span className="text-2xl font-bold text-green-600 ml-2">
+                ${product.discountPrice}
+              </span>
+            </div>
+          ) : (
+            <p className="text-2xl font-bold mt-6">${product.price}</p>
+          )}
           {/* Wait Time */}
           <p className="text-lg text-gray-700 mt-6">
             <strong>Wait Time:</strong> {product.leadTime || "Not Specified"}
@@ -70,7 +81,9 @@ const ProductDetails = () => {
           <p className="text-lg text-gray-700 mt-2">
             <strong>Status:</strong> {product.status || "Unknown"}
           </p>
-          <p className="text-gray-800 mt-6">{product.description}</p>
+          <p className="text-gray-800 mt-6 whitespace-pre-line">
+            {product.description}
+          </p>
         </div>
       </div>
     </div>

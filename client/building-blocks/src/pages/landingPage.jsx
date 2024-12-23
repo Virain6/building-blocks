@@ -23,7 +23,7 @@ const LandingPage = () => {
             animate-text
             "
           >
-            BLOCKS
+            Blocks
           </h1>
         </div>
         <p className="text-m mb-6 sm:text-lg">

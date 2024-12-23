@@ -35,17 +35,18 @@ export const addProduct = mutation(async ({ db }, product) => {
 
   const {
     productName,
-    description,
+    description = "", // Default empty string
     price,
-    stock,
+    stock = 0, // Default 0
     departmentCode,
-    supplierID,
-    leadTime,
-    discountPrice,
-    status,
-    picture,
+    supplierID = "", // Default empty string
+    leadTime = 0, // Default 0
+    discountPrice = 0, // Default 0
+    status = "available", // Default "available"
+    picture = "", // Default empty string
   } = product;
 
+  // Validate required fields
   if (!productName || !price || !departmentCode) {
     throw new Error(
       "Missing required fields: productName, price, departmentCode"

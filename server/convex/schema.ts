@@ -47,7 +47,8 @@ export default defineSchema({
   suppliers: defineTable({ supplierName: v.string() }),
 
   users: defineTable({
-    adminLogin: v.string(),
-    adminPassword: v.string(),
+    uid: v.string(), // Firebase UID
+    email: v.string(),
+    isAdmin: v.boolean(),
   }),
 });

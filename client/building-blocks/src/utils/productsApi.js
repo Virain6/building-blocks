@@ -41,3 +41,17 @@ export const searchProducts = async ({
   console.log("Search response:", response.data); // Debugging response
   return response.data;
 };
+
+export const addProduct = async (product) => {
+  try {
+    const response = await axios.post("/products/add", product); // Send product data
+    console.log("Product added:", response.data); // Debug log
+    return response.data; // Return added product
+  } catch (error) {
+    console.error(
+      "Error adding product:",
+      error.response?.data || error.message
+    );
+    throw error; // Propagate error to the calling function
+  }
+};

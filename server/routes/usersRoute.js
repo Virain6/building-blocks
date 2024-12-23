@@ -9,14 +9,21 @@ dotenv.config({ path: ".env.local" });
 const router = express.Router();
 const client = new ConvexHttpClient(process.env.CONVEX_URL); // Use the URL from the .env.local file
 
-// Get all products
-router.get("/", async (req, res) => {
+router.post("/register", async (req, res) => {
+  const { uid, email } = req.body;
+
   try {
-    const users = await client.query(api.users.getAllAdmins);
-    res.json(users);
+    console.log("Register endpoint hit with:", { uid, email }); // Debugging log
+    await client.mutation(api.users.createUser, {
+      uid,
+      email,
+      isAdmin: false, // Default is non-admin
+    });
+
+    res.status(200).json({ message: "User registered successfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to fetch users" });
+    console.error("Error creating user:", error);
+    res.status(500).json({ error: "Failed to register user" });
   }
 });
 

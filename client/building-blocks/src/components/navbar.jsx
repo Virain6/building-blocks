@@ -204,7 +204,7 @@ const Navbar = () => {
                       href="/new-arrivals"
                       className="block px-4 py-2 hover:bg-gray-100"
                     >
-                      New Arrivals
+                      Newly Updated
                     </a>
                   </li>
                   <li>
