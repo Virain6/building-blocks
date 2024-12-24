@@ -6,6 +6,7 @@ import {
   editSupplier,
 } from "../../../utils/supplierApi";
 import SupplierFormModal from "./supplierFormModal";
+import { toast } from "react-toastify";
 
 const SupplierManagementPage = () => {
   const [suppliers, setSuppliers] = useState([]);
@@ -38,6 +39,7 @@ const SupplierManagementPage = () => {
           id: supplier._id,
           supplierName: supplier.supplierName,
         });
+        toast.success("Supplier updated successfully.");
         setSuppliers((prev) =>
           prev.map((sup) =>
             sup._id === updatedSupplier._id ? updatedSupplier : sup
@@ -47,17 +49,18 @@ const SupplierManagementPage = () => {
         setSelectedSupplier(null);
       } catch (error) {
         console.error("Error updating supplier:", error);
-        alert("Failed to update supplier.");
+        toast.error("Failed to update supplier.");
       }
     } else {
       // Adding new supplier
       try {
         const addedSupplier = await addSupplier(supplier);
+        toast.success("Supplier added successfully.");
         setSuppliers((prev) => [...prev, addedSupplier]);
         setIsModalOpen(false);
       } catch (error) {
         console.error("Error adding supplier:", error);
-        alert("Failed to add supplier.");
+        toast.error("Failed to add supplier.");
       }
     }
   };
@@ -66,10 +69,11 @@ const SupplierManagementPage = () => {
     if (window.confirm("Are you sure you want to delete this supplier?")) {
       try {
         await deleteSupplier(id);
+        toast.success("Supplier deleted successfully.");
         setSuppliers((prev) => prev.filter((sup) => sup._id !== id));
       } catch (error) {
         console.error("Error deleting supplier:", error);
-        alert("Failed to delete supplier.");
+        toast.error("Failed to delete supplier.");
       }
     }
   };
@@ -148,7 +152,7 @@ const SupplierManagementPage = () => {
           </thead>
           <tbody>
             {sortedSuppliers.map((supplier, index) => (
-              <tr key={supplier._id} className="border-b">
+              <tr key={supplier._id} className="border-b hover:bg-gray-100">
                 <td className="px-4 py-2">{index + 1}</td>
                 <td className="px-4 py-2">{supplier.supplierName}</td>
                 <td className="px-4 py-2">

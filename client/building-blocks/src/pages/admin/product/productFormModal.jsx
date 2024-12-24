@@ -3,6 +3,7 @@ import { fetchDepartments } from "../../../utils/departmentApi";
 import { fetchSuppliers } from "../../../utils/supplierApi";
 import { addProduct, editProduct } from "../../../utils/productsApi";
 import { capitalizeWords } from "../../../utils/stringUtils.js";
+import { toast } from "react-toastify";
 
 const ProductFormModal = ({ product, onClose, onSave }) => {
   const [formData, setFormData] = useState(
@@ -68,17 +69,17 @@ const ProductFormModal = ({ product, onClose, onSave }) => {
       if (product) {
         // Edit existing product
         await editProduct(product._id, formData);
-        alert("Product updated successfully!");
+        toast.success("Product updated successfully!");
       } else {
         // Add new product
         const newProduct = await addProduct(formData);
-        alert("Product added successfully!");
+        toast.success("Product added successfully!");
         onSave(newProduct);
       }
       onClose();
     } catch (error) {
       console.error("Error saving product:", error);
-      alert("Failed to save product. Please try again.");
+      toast.error("Failed to save product. Please try again.");
     } finally {
       setIsLoading(false);
     }

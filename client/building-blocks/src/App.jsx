@@ -14,6 +14,8 @@ import ChangePassword from "./pages/admin/settings/settingsPage";
 import DepartmentManagementPage from "./pages/admin/department/departmentPage";
 import SupplierManagementPage from "./pages/admin/supplier/supplierPage";
 import { AuthProvider } from "./context/AuthContext"; // Import AuthProvider
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -22,6 +24,7 @@ function App() {
       {/* Wrap the entire app in AuthProvider */}
       <Router>
         <div className="min-h-screen flex flex-col">
+          <ToastContainer position="top-right" autoClose={3000} />
           <Navbar />
           <Routes>
             {/* Public Routes */}

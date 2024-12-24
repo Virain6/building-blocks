@@ -5,6 +5,7 @@ import { searchProducts, deleteProduct } from "../../../utils/productsApi";
 import CustomDropdown from "../../../components/dropdown";
 import ProductFormModal from "./productFormModal";
 import { capitalizeWords } from "../../../utils/stringUtils.js";
+import { toast } from "react-toastify";
 
 const ProductsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -128,11 +129,12 @@ const ProductsPage = () => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
         await deleteProduct(id);
-        alert("Product deleted successfully!");
+
         setProducts((prev) => prev.filter((product) => product._id !== id)); // Remove deleted product from state
+        toast.success("Product deleted successfully!");
       } catch (error) {
         console.error("Error deleting product:", error);
-        alert("Failed to delete product. Please try again.");
+        toast.error("Failed to delete product. Please try again.");
       }
     }
   };
@@ -292,7 +294,7 @@ const ProductsPage = () => {
             </thead>
             <tbody>
               {sortedProducts.map((product, index) => (
-                <tr key={product._id} className="border-b">
+                <tr key={product._id} className="border-b hover:bg-gray-100">
                   <td className="px-4 py-2">{index + 1}</td>
                   <td className="px-4 py-2">
                     {capitalizeWords(product.productName)}

@@ -35,6 +35,7 @@ const DepartmentManagementPage = () => {
       // Edit existing department
       try {
         const updatedDepartment = await editDepartment(department); // Call API to edit
+        toast.success("Department updated successfully.");
         setDepartments((prev) =>
           prev.map((dept) =>
             dept._id === updatedDepartment._id ? updatedDepartment : dept
@@ -44,17 +45,18 @@ const DepartmentManagementPage = () => {
         setSelectedDepartment(null);
       } catch (error) {
         console.error("Error updating department:", error);
-        alert("Failed to update department.");
+        toast.error("Failed to update department.");
       }
     } else {
       // Add new department
       try {
         const addedDepartment = await addDepartment(department);
+        toast.success("Department added successfully.");
         setDepartments((prev) => [...prev, addedDepartment]);
         setIsModalOpen(false);
       } catch (error) {
         console.error("Error adding department:", error);
-        alert("Failed to add department.");
+        toast.error("Failed to add department.");
       }
     }
   };
@@ -63,10 +65,11 @@ const DepartmentManagementPage = () => {
     if (window.confirm("Are you sure you want to delete this department?")) {
       try {
         await deleteDepartment(id);
+        toast.success("Department deleted successfully.");
         setDepartments((prev) => prev.filter((dept) => dept._id !== id));
       } catch (error) {
         console.error("Error deleting department:", error);
-        alert("Failed to delete department.");
+        toast.error("Failed to delete department.");
       }
     }
   };
@@ -153,7 +156,7 @@ const DepartmentManagementPage = () => {
           </thead>
           <tbody>
             {sortedDepartments.map((department, index) => (
-              <tr key={department._id} className="border-b">
+              <tr key={department._id} className="border-b hover:bg-gray-100">
                 <td className="px-4 py-2">{index + 1}</td>
                 <td className="px-4 py-2">{department.departmentName}</td>
                 <td className="px-4 py-2">{department.departmentCode}</td>
