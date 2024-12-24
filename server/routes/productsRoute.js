@@ -100,4 +100,20 @@ router.delete("/delete/:id", async (req, res) => {
     res.status(500).json({ error: "Failed to delete product" });
   }
 });
+
+router.put("/edit/:id", async (req, res) => {
+  const { id } = req.params;
+  const updatedData = req.body;
+
+  try {
+    const result = await client.mutation(api.products.editProduct, {
+      id,
+      updatedData,
+    });
+    res.status(200).json(result); // Return a success message
+  } catch (error) {
+    console.error("Error editing product:", error);
+    res.status(500).json({ error: "Failed to edit product" }); // Handle errors
+  }
+});
 export default router;

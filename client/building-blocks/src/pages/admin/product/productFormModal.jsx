@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { fetchDepartments } from "../../../utils/departmentApi";
 import { fetchSuppliers } from "../../../utils/supplierApi";
-import { addProduct } from "../../../utils/productsApi";
+import { addProduct, editProduct } from "../../../utils/productsApi";
 
 const ProductFormModal = ({ product, onClose, onSave }) => {
   const [formData, setFormData] = useState(
@@ -64,12 +64,15 @@ const ProductFormModal = ({ product, onClose, onSave }) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      if (!product) {
-        const newProduct = await addProduct(formData);
-        onSave(newProduct);
-        alert("Product added successfully!");
+      if (product) {
+        // Edit existing product
+        await editProduct(product._id, formData);
+        alert("Product updated successfully!");
       } else {
-        alert("Editing functionality not implemented in this example!");
+        // Add new product
+        const newProduct = await addProduct(formData);
+        alert("Product added successfully!");
+        onSave(newProduct);
       }
       onClose();
     } catch (error) {
@@ -113,6 +116,7 @@ const ProductFormModal = ({ product, onClose, onSave }) => {
             {/* Pricing Details */}
             <div>
               <h3 className="text-lg font-semibold mb-2">Pricing Details</h3>
+              <h3 className="text-md mb-2">Price</h3>
               <input
                 type="number"
                 name="price"
@@ -122,6 +126,7 @@ const ProductFormModal = ({ product, onClose, onSave }) => {
                 className="w-full px-4 py-2 border rounded-md"
                 required
               />
+              <h3 className="text-md mb-2">Discount (optional)</h3>
               <input
                 type="number"
                 name="discountPrice"
@@ -135,6 +140,7 @@ const ProductFormModal = ({ product, onClose, onSave }) => {
             {/* Inventory Details */}
             <div>
               <h3 className="text-lg font-semibold mb-2">Inventory Details</h3>
+              <h3 className="text-md mb-2">Stock (optional)</h3>
               <input
                 type="number"
                 name="stock"
@@ -143,6 +149,7 @@ const ProductFormModal = ({ product, onClose, onSave }) => {
                 placeholder="Stock"
                 className="w-full px-4 py-2 border rounded-md"
               />
+              <h3 className="text-md mb-2">Lead Time</h3>
               <input
                 type="number"
                 name="leadTime"

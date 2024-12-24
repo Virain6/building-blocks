@@ -170,3 +170,18 @@ export const deleteProduct = mutation(async ({ db }, { id }) => {
     throw new Error(`Failed to delete product: ${error.message}`);
   }
 });
+
+export const editProduct = mutation(async ({ db }, { id, updatedData }) => {
+  if (!id || !updatedData) {
+    throw new Error("Product ID and updated data are required.");
+  }
+
+  const existingProduct = await db.get(id);
+  if (!existingProduct) {
+    throw new Error(`No product found with ID: ${id}`);
+  }
+
+  await db.patch(id, updatedData);
+
+  return { message: "Product updated successfully" };
+});

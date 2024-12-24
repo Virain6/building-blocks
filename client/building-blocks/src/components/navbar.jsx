@@ -112,7 +112,7 @@ const Navbar = () => {
         <div className="container mx-auto flex items-center justify-between">
           {/* Company Name */}
           <Link to="/" className="text-4xl font-bold whitespace-nowrap">
-            <h1 className="text-4xl font-bold whitespace-nowrap">Blocks</h1>
+            <h1 className="text-4xl font-bold whitespace-nowrap">KeyStone</h1>
           </Link>
 
           {/* Search Section */}

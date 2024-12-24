@@ -69,3 +69,14 @@ export const deleteProduct = async (id) => {
     throw error;
   }
 };
+
+export const editProduct = async (id, updatedData) => {
+  try {
+    const response = await axios.put(`/products/edit/${id}`, updatedData);
+    console.log("Product updated:", response.data); // Debug log
+    return response.data; // Return the response data
+  } catch (error) {
+    console.error("Error editing product:", error);
+    throw error; // Propagate error to the calling function
+  }
+};

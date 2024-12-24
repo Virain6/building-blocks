@@ -118,19 +118,10 @@ const ProductsPage = () => {
     setIsModalOpen(true);
   };
 
-  const handleSaveProduct = (newProduct) => {
-    if (selectedProduct) {
-      // Edit product
-      setProducts((prev) =>
-        prev.map((p) => (p._id === newProduct._id ? newProduct : p))
-      );
-    } else {
-      // Add new product
-      setProducts((prev) => [
-        ...prev,
-        { ...newProduct, _id: Date.now().toString() },
-      ]);
-    }
+  const handleSaveProduct = (updatedProduct) => {
+    setProducts((prev) =>
+      prev.map((p) => (p._id === updatedProduct._id ? updatedProduct : p))
+    );
     setIsModalOpen(false);
     setSelectedProduct(null);
   };
@@ -151,15 +142,17 @@ const ProductsPage = () => {
   return (
     <div className="container mx-auto p-4 sm:p-6">
       <div className="bg-amber-500 text-white shadow-lg rounded-lg p-4 sm:p-6 mb-6">
-        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-4">
-          Manage Products
-        </h2>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
-        >
-          + Add Product
-        </button>
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex-1 text-center">
+            <h2 className="text-2xl sm:text-3xl font-bold">Manage Products</h2>
+          </div>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+          >
+            + Add Product
+          </button>
+        </div>
         <div className="flex flex-wrap gap-4">
           <input
             type="text"
