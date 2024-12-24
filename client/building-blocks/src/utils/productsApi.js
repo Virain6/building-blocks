@@ -55,3 +55,17 @@ export const addProduct = async (product) => {
     throw error; // Propagate error to the calling function
   }
 };
+
+export const deleteProduct = async (id) => {
+  try {
+    const response = await axios.delete(`/products/delete/${id}`);
+    console.log("Product deleted:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error deleting product:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};

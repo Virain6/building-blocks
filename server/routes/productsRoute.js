@@ -88,4 +88,16 @@ router.get("/search", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch products by name" });
   }
 });
+
+router.delete("/delete/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await client.mutation(api.products.deleteProduct, { id });
+    res.status(200).json({ message: "Product deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    res.status(500).json({ error: "Failed to delete product" });
+  }
+});
 export default router;

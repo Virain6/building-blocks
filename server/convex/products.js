@@ -157,3 +157,16 @@ export const searchByName = query(
     };
   }
 );
+
+export const deleteProduct = mutation(async ({ db }, { id }) => {
+  if (!id) {
+    throw new Error("Product ID is required to delete a product");
+  }
+
+  try {
+    await db.delete(id);
+    return { success: true };
+  } catch (error) {
+    throw new Error(`Failed to delete product: ${error.message}`);
+  }
+});
