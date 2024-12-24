@@ -17,19 +17,17 @@ const AdminRouter = () => {
   return (
     <div className="flex bg-gray-100" style={{ height: "calc(100vh - 7rem)" }}>
       {/* Sidebar Navigation */}
-      <aside className="w-64 bg-blue-600 text-white shadow-lg flex flex-col">
+      <aside className="w-64 bg-gray-700 text-white shadow-lg flex flex-col">
         <div className="p-4 text-center">
           <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-          <p className="block px-4 py-2 rounded-md hover:bg-blue-700 transition">
-            {currentUser.email}
-          </p>
+          <p className="block px-4 py-2">{currentUser.email}</p>
         </div>
         <nav className="flex-1">
           <ul className="space-y-2 px-4">
             <li>
               <Link
                 to="/admin/settings"
-                className="block px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                className="block px-4 py-2 rounded-md hover:bg-amber-500 transition"
               >
                 Settings
               </Link>
@@ -37,7 +35,7 @@ const AdminRouter = () => {
             <li>
               <Link
                 to="/admin/management"
-                className="block px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                className="block px-4 py-2 rounded-md hover:bg-amber-500 transition"
               >
                 Admin Management
               </Link>
@@ -45,7 +43,7 @@ const AdminRouter = () => {
             <li>
               <Link
                 to="/admin/products"
-                className="block px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                className="block px-4 py-2 rounded-md hover:bg-amber-500 transition"
               >
                 Products
               </Link>
@@ -53,7 +51,7 @@ const AdminRouter = () => {
             <li>
               <Link
                 to="/admin/departments"
-                className="block px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                className="block px-4 py-2 rounded-md hover:bg-amber-500 transition"
               >
                 Departments
               </Link>
@@ -61,7 +59,7 @@ const AdminRouter = () => {
             <li>
               <Link
                 to="/admin/suppliers"
-                className="block px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                className="block px-4 py-2 rounded-md hover:bg-amber-500 transition"
               >
                 Suppliers
               </Link>
