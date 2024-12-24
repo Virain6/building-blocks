@@ -19,6 +19,7 @@ const ProductsPage = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" }); // Sorting state
   const limit = 20;
 
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -136,6 +137,33 @@ const ProductsPage = () => {
     }
   };
 
+  const handleSort = (key) => {
+    if (key === null) {
+      // Reset sort configuration
+      setSortConfig({ key: null, direction: "asc" });
+    } else {
+      let direction = "asc";
+      if (sortConfig.key === key && sortConfig.direction === "asc") {
+        direction = "desc";
+      }
+      setSortConfig({ key, direction });
+    }
+  };
+
+  const sortedProducts = [...products].sort((a, b) => {
+    if (!sortConfig.key) return 0;
+    const aValue = a[sortConfig.key];
+    const bValue = b[sortConfig.key];
+
+    if (aValue < bValue) {
+      return sortConfig.direction === "asc" ? -1 : 1;
+    }
+    if (aValue > bValue) {
+      return sortConfig.direction === "asc" ? 1 : -1;
+    }
+    return 0;
+  });
+
   return (
     <div className="container mx-auto p-4 sm:p-6 overflow-y-auto">
       <div className="bg-amber-500 text-white shadow-lg rounded-lg p-4 sm:p-6 mb-6">
@@ -197,19 +225,73 @@ const ProductsPage = () => {
           <table className="min-w-full text-sm text-left">
             <thead className="sticky top-0 bg-amber-500 text-white">
               <tr>
-                <th className="px-4 py-2">#</th>
-                <th className="px-4 py-2">Name</th>
-                <th className="px-4 py-2">Price</th>
-                <th className="px-4 py-2">Discount</th>
-                <th className="px-4 py-2">Lead Time</th>
-                <th className="px-4 py-2">Department</th>
-                <th className="px-4 py-2">Supplier</th>
-                <th className="px-4 py-2">Status</th>
+                <th
+                  className="px-4 py-2 cursor-pointer"
+                  onClick={() => handleSort(null)}
+                >
+                  #
+                </th>
+                <th
+                  className="px-4 py-2 cursor-pointer"
+                  onClick={() => handleSort("productName")}
+                >
+                  Name
+                  {sortConfig.key === "productName" &&
+                    (sortConfig.direction === "asc" ? " ▲" : " ▼")}
+                </th>
+                <th
+                  className="px-4 py-2 cursor-pointer"
+                  onClick={() => handleSort("price")}
+                >
+                  Price
+                  {sortConfig.key === "price" &&
+                    (sortConfig.direction === "asc" ? " ▲" : " ▼")}
+                </th>
+                <th
+                  className="px-4 py-2 cursor-pointer"
+                  onClick={() => handleSort("discountPrice")}
+                >
+                  Discount
+                  {sortConfig.key === "discountPrice" &&
+                    (sortConfig.direction === "asc" ? " ▲" : " ▼")}
+                </th>
+                <th
+                  className="px-4 py-2 cursor-pointer"
+                  onClick={() => handleSort("leadTime")}
+                >
+                  Lead Time
+                  {sortConfig.key === "leadTime" &&
+                    (sortConfig.direction === "asc" ? " ▲" : " ▼")}
+                </th>
+                <th
+                  className="px-4 py-2 cursor-pointer"
+                  onClick={() => handleSort("departmentCode")}
+                >
+                  Department
+                  {sortConfig.key === "departmentCode" &&
+                    (sortConfig.direction === "asc" ? " ▲" : " ▼")}
+                </th>
+                <th
+                  className="px-4 py-2 cursor-pointer"
+                  onClick={() => handleSort("supplierID")}
+                >
+                  Supplier
+                  {sortConfig.key === "supplierID" &&
+                    (sortConfig.direction === "asc" ? " ▲" : " ▼")}
+                </th>
+                <th
+                  className="px-4 py-2 cursor-pointer"
+                  onClick={() => handleSort("status")}
+                >
+                  Status
+                  {sortConfig.key === "status" &&
+                    (sortConfig.direction === "asc" ? " ▲" : " ▼")}
+                </th>
                 <th className="px-4 py-2">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {products.map((product, index) => (
+              {sortedProducts.map((product, index) => (
                 <tr key={product._id} className="border-b">
                   <td className="px-4 py-2">{index + 1}</td>
                   <td className="px-4 py-2">

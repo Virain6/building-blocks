@@ -1,7 +1,13 @@
 import React from "react";
 import ProductCard from "./productCard";
 
-const ScrollableProductList = ({ products, title, onViewMore }) => {
+const ScrollableProductList = ({ products = [], title, onViewMore }) => {
+  // Ensure products is always an array
+  if (!Array.isArray(products)) {
+    console.error("ScrollableProductList: products is not an array", products);
+    products = [];
+  }
+
   return (
     <div className="my-8">
       <h1 className="text-4xl font-bold ml-8 mb-6 mt-6 text-amber-500">

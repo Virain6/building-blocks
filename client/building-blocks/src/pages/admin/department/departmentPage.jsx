@@ -12,6 +12,7 @@ const DepartmentManagementPage = () => {
   const [loading, setLoading] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
   useEffect(() => {
     const loadDepartments = async () => {
@@ -75,6 +76,33 @@ const DepartmentManagementPage = () => {
     setIsModalOpen(true);
   };
 
+  const handleSort = (key) => {
+    if (key === null) {
+      // Reset sort configuration
+      setSortConfig({ key: null, direction: "asc" });
+    } else {
+      let direction = "asc";
+      if (sortConfig.key === key && sortConfig.direction === "asc") {
+        direction = "desc";
+      }
+      setSortConfig({ key, direction });
+    }
+  };
+
+  const sortedDepartments = [...departments].sort((a, b) => {
+    if (!sortConfig.key) return 0;
+    const aValue = a[sortConfig.key];
+    const bValue = b[sortConfig.key];
+
+    if (aValue < bValue) {
+      return sortConfig.direction === "asc" ? -1 : 1;
+    }
+    if (aValue > bValue) {
+      return sortConfig.direction === "asc" ? 1 : -1;
+    }
+    return 0;
+  });
+
   return (
     <div className="container mx-auto p-6">
       <div className="bg-amber-500 text-white shadow-lg rounded-lg p-4 sm:p-6 mb-6">
@@ -98,14 +126,33 @@ const DepartmentManagementPage = () => {
         <table className="min-w-full text-sm text-left">
           <thead className="bg-amber-500 text-white">
             <tr>
-              <th className="px-4 py-2">#</th>
-              <th className="px-4 py-2">Department Name</th>
-              <th className="px-4 py-2">Department Code</th>
+              <th
+                className="px-4 py-2 cursor-pointer"
+                onClick={() => handleSort(null)}
+              >
+                #
+              </th>
+              <th
+                className="px-4 py-2 cursor-pointer"
+                onClick={() => handleSort("departmentName")}
+              >
+                Department Name
+                {sortConfig.key === "departmentName" &&
+                  (sortConfig.direction === "asc" ? " ▲" : " ▼")}
+              </th>
+              <th
+                className="px-4 py-2 cursor-pointer"
+                onClick={() => handleSort("departmentCode")}
+              >
+                Department Code
+                {sortConfig.key === "departmentCode" &&
+                  (sortConfig.direction === "asc" ? " ▲" : " ▼")}
+              </th>
               <th className="px-4 py-2">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {departments.map((department, index) => (
+            {sortedDepartments.map((department, index) => (
               <tr key={department._id} className="border-b">
                 <td className="px-4 py-2">{index + 1}</td>
                 <td className="px-4 py-2">{department.departmentName}</td>
