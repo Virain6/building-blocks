@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const { login } = useAuth();
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate(); // React Router's navigate hook
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -11,19 +14,26 @@ const LoginPage = () => {
 
     try {
       await login(email, password);
-      alert("Logged in successfully!");
+      setErrorMessage(""); // Clear error message on successful login
+      navigate("/admin"); // Navigate to the admin page
     } catch (error) {
       console.error("Error during login:", error);
-      alert("Login failed. Please check your credentials.");
+      setErrorMessage("Login failed. Please check your credentials.");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div
+      className="flex items-center justify-center bg-gray-100"
+      style={{ height: "calc(100vh - 13rem)" }}
+    >
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
           Admin Login
         </h2>
+        {errorMessage && (
+          <p className="text-red-600 text-center mb-4">{errorMessage}</p>
+        )}
         <form onSubmit={handleLogin} className="space-y-6">
           {/* Email Input */}
           <div>

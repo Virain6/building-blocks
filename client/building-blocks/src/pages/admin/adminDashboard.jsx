@@ -15,7 +15,10 @@ const AdminRouter = () => {
     }
   };
   return (
-    <div className="flex bg-gray-100" style={{ height: "calc(100vh - 7rem)" }}>
+    <div
+      className=" flex bg-gray-100"
+      style={{ minHeight: "calc(100vh - 13rem)" }}
+    >
       {/* Sidebar Navigation */}
       <aside className="w-64 bg-gray-700 text-white shadow-lg flex flex-col">
         <div className="p-4 text-center">
@@ -42,7 +45,7 @@ const AdminRouter = () => {
             </li>
             <li>
               <Link
-                to="/admin/products"
+                to="/admin"
                 className="block px-4 py-2 rounded-md hover:bg-amber-500 transition"
               >
                 Products

@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  fetchDepartments,
-  fetchDepartmentByCode,
-} from "../../../utils/departmentApi";
-import { fetchSuppliers, fetchSuppliersById } from "../../../utils/supplierApi";
+import { fetchDepartments } from "../../../utils/departmentApi";
+import { fetchSuppliers } from "../../../utils/supplierApi";
 import { searchProducts, deleteProduct } from "../../../utils/productsApi";
 import CustomDropdown from "../../../components/dropdown";
 import ProductFormModal from "./productFormModal";
@@ -140,7 +137,7 @@ const ProductsPage = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 sm:p-6">
+    <div className="container mx-auto p-4 sm:p-6 overflow-y-auto">
       <div className="bg-amber-500 text-white shadow-lg rounded-lg p-4 sm:p-6 mb-6">
         <div className="flex justify-between items-center mb-4">
           <div className="flex-1 text-center">
@@ -196,54 +193,78 @@ const ProductsPage = () => {
       {loading && <p className="text-center text-gray-700">Loading...</p>}
 
       <div className="overflow-x-auto shadow-lg rounded-lg bg-white">
-        <table className="min-w-full text-sm text-left">
-          <thead className="bg-amber-500 text-white">
-            <tr>
-              <th className="px-4 py-2">Name</th>
-              <th className="px-4 py-2">Price</th>
-              <th className="px-4 py-2">Discount</th>
-              <th className="px-4 py-2">Lead Time</th>
-              <th className="px-4 py-2">Department</th>
-              <th className="px-4 py-2">Supplier</th>
-              <th className="px-4 py-2">Status</th>
-              <th className="px-4 py-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((product) => (
-              <tr key={product._id} className="border-b">
-                <td className="px-4 py-2">
-                  {capitalizeWords(product.productName)}
-                </td>
-                <td className="px-4 py-2">${product.price}</td>
-                <td className="px-4 py-2">${product.discountPrice}</td>
-                <td className="px-4 py-2">{product.leadTime}</td>
-                <td className="px-4 py-2">
-                  {departmentMap[product.departmentCode] ||
-                    "Unknown Department"}
-                </td>
-                <td className="px-4 py-2">
-                  {supplierMap[product.supplierID] || "Unknown Supplier"}
-                </td>
-                <td className="px-4 py-2">{product.status}</td>
-                <td className="px-4 py-2">
-                  <button
-                    onClick={() => onEdit(product)}
-                    className="text-blue-500 hover:underline mr-2"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(product._id)}
-                    className="text-red-500 hover:underline"
-                  >
-                    Delete
-                  </button>
-                </td>
+        <div className="overflow-y-auto max-h-[500px]">
+          <table className="min-w-full text-sm text-left">
+            <thead className="sticky top-0 bg-amber-500 text-white">
+              <tr>
+                <th className="px-4 py-2">#</th>
+                <th className="px-4 py-2">Name</th>
+                <th className="px-4 py-2">Price</th>
+                <th className="px-4 py-2">Discount</th>
+                <th className="px-4 py-2">Lead Time</th>
+                <th className="px-4 py-2">Department</th>
+                <th className="px-4 py-2">Supplier</th>
+                <th className="px-4 py-2">Status</th>
+                <th className="px-4 py-2">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {products.map((product, index) => (
+                <tr key={product._id} className="border-b">
+                  <td className="px-4 py-2">{index + 1}</td>
+                  <td className="px-4 py-2">
+                    {capitalizeWords(product.productName)}
+                  </td>
+                  <td className="px-4 py-2">${product.price}</td>
+                  <td className="px-4 py-2">${product.discountPrice}</td>
+                  <td className="px-4 py-2">{product.leadTime}</td>
+                  <td className="px-4 py-2">
+                    {departmentMap[product.departmentCode] ||
+                      "Unknown Department"}
+                  </td>
+                  <td className="px-4 py-2">
+                    {supplierMap[product.supplierID] || "Unknown Supplier"}
+                  </td>
+                  <td className="px-4 py-2">{product.status}</td>
+                  <td className="px-4 py-2">
+                    <button
+                      onClick={() => onEdit(product)}
+                      className="text-blue-500 hover:underline mr-2"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(product._id)}
+                      className="text-red-500 hover:underline"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="flex justify-between items-center mt-4">
+        <button
+          onClick={() => handleSearch(page - 1)}
+          disabled={page === 0}
+          className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md shadow hover:bg-gray-400 disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <p className="text-gray-700">
+          Page {page + 1} of {Math.ceil(total / limit)}
+        </p>
+        <button
+          onClick={() => handleSearch(page + 1)}
+          disabled={(page + 1) * limit >= total}
+          className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md shadow hover:bg-gray-400 disabled:opacity-50"
+        >
+          Next
+        </button>
       </div>
 
       {!loading && products.length === 0 && (

@@ -4,14 +4,13 @@ import LandingPage from "./pages/landingPage";
 import Footer from "./components/footer";
 import ProductSearch from "./pages/searchPage";
 import ProductDetails from "./pages/productPage";
-import AdminPage from "./pages/admin/adminPage";
 import Login from "./components/admin/login"; // Import the Login component
 import RegisterPage from "./components/admin/register";
 import PrivateRoute from "./components/admin/privateRoute"; // Import the PrivateRoute component
-import AddProductPage from "./pages/admin/addProductPage"; // Import Add Product Page
 import AdminRouter from "./pages/admin/adminDashboard";
-import SettingsPage from "./pages/admin/settingsPage"; //
 import ProductsPage from "./pages/admin/product/productsPage"; // Import
+import AdminManagement from "./pages/admin/adminManagment/adminManagmentPage";
+import ChangePassword from "./pages/admin/settings/settingsPage";
 import { AuthProvider } from "./context/AuthContext"; // Import AuthProvider
 
 function App() {
@@ -39,17 +38,10 @@ function App() {
                 </PrivateRoute>
               }
             >
-              <Route path="settings" element={<SettingsPage />} />
-              <Route path="products" element={<ProductsPage />} />
+              <Route path="" element={<ProductsPage />} />
+              <Route path="management" element={<AdminManagement />} />
+              <Route path="settings" element={<ChangePassword />} />
             </Route>
-            <Route
-              path="/add-product"
-              element={
-                <PrivateRoute>
-                  <AddProductPage />
-                </PrivateRoute>
-              }
-            />
           </Routes>
 
           <Footer />

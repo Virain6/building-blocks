@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { fetchDepartments } from "../../../utils/departmentApi";
 import { fetchSuppliers } from "../../../utils/supplierApi";
 import { addProduct, editProduct } from "../../../utils/productsApi";
+import { capitalizeWords } from "../../../utils/stringUtils.js";
 
 const ProductFormModal = ({ product, onClose, onSave }) => {
   const [formData, setFormData] = useState(
@@ -97,7 +98,7 @@ const ProductFormModal = ({ product, onClose, onSave }) => {
               <input
                 type="text"
                 name="productName"
-                value={formData.productName}
+                value={capitalizeWords(formData.productName)}
                 onChange={handleChange}
                 placeholder="Product Name"
                 className="w-full px-4 py-2 border rounded-md"

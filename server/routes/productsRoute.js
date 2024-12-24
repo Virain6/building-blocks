@@ -1,5 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
+import { verifyTokenMiddleware } from "../middleware/authMiddleware.js";
+import { isAdminMiddleware } from "../middleware/isAdminMiddleware.js";
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "../convex/_generated/api.js"; // Adjust path as needed
 
@@ -49,20 +51,25 @@ router.get("/latest/:limit", async (req, res) => {
   }
 });
 
-router.post("/add", async (req, res) => {
-  const productData = req.body; // Get product data from the request body
+router.post(
+  "/add",
+  verifyTokenMiddleware, // Ensure token is valid
+  isAdminMiddleware, // Ensure user is admin
+  async (req, res) => {
+    const productData = req.body; // Get product data from the request body
 
-  try {
-    const addedProduct = await client.mutation(
-      api.products.addProduct,
-      productData
-    ); // Call Convex mutation
-    res.status(201).json(addedProduct); // Return the created product
-  } catch (error) {
-    console.error("Error adding product:", error);
-    res.status(500).json({ error: "Failed to add product" }); // Handle errors
+    try {
+      const addedProduct = await client.mutation(
+        api.products.addProduct,
+        productData
+      ); // Call Convex mutation
+      res.status(201).json(addedProduct); // Return the created product
+    } catch (error) {
+      console.error("Error adding product:", error);
+      res.status(500).json({ error: "Failed to add product" }); // Handle errors
+    }
   }
-});
+);
 
 router.get("/search", async (req, res) => {
   const {
@@ -89,31 +96,41 @@ router.get("/search", async (req, res) => {
   }
 });
 
-router.delete("/delete/:id", async (req, res) => {
-  const { id } = req.params;
+router.delete(
+  "/delete/:id",
+  verifyTokenMiddleware, // Ensure token is valid
+  isAdminMiddleware, // Ensure user is admin
+  async (req, res) => {
+    const { id } = req.params;
 
-  try {
-    await client.mutation(api.products.deleteProduct, { id });
-    res.status(200).json({ message: "Product deleted successfully" });
-  } catch (error) {
-    console.error("Error deleting product:", error);
-    res.status(500).json({ error: "Failed to delete product" });
+    try {
+      await client.mutation(api.products.deleteProduct, { id });
+      res.status(200).json({ message: "Product deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      res.status(500).json({ error: "Failed to delete product" });
+    }
   }
-});
+);
 
-router.put("/edit/:id", async (req, res) => {
-  const { id } = req.params;
-  const updatedData = req.body;
+router.put(
+  "/edit/:id",
+  verifyTokenMiddleware, // Ensure token is valid
+  isAdminMiddleware, // Ensure user is admin
+  async (req, res) => {
+    const { id } = req.params;
+    const updatedData = req.body;
 
-  try {
-    const result = await client.mutation(api.products.editProduct, {
-      id,
-      updatedData,
-    });
-    res.status(200).json(result); // Return a success message
-  } catch (error) {
-    console.error("Error editing product:", error);
-    res.status(500).json({ error: "Failed to edit product" }); // Handle errors
+    try {
+      const result = await client.mutation(api.products.editProduct, {
+        id,
+        updatedData,
+      });
+      res.status(200).json(result); // Return a success message
+    } catch (error) {
+      console.error("Error editing product:", error);
+      res.status(500).json({ error: "Failed to edit product" }); // Handle errors
+    }
   }
-});
+);
 export default router;

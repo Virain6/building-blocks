@@ -40,12 +40,12 @@ const GlowBox = () => {
                 className="absolute inset-0 pointer-events-none rounded-lg border-2 border-transparent"
                 style={{
                   maskImage: `
-                    radial-gradient(circle 50px at var(--x) var(--y),
+                    radial-gradient(circle 100px at var(--x) var(--y),
                       white,
                       transparent
                     )`,
                   WebkitMaskImage: `
-                    radial-gradient(circle 50px at var(--x) var(--y),
+                    radial-gradient(circle 110px at var(--x) var(--y),
                       white,
                       transparent
                     )`,
