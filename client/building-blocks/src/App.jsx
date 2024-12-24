@@ -11,6 +11,7 @@ import AdminRouter from "./pages/admin/adminDashboard";
 import ProductsPage from "./pages/admin/product/productsPage"; // Import
 import AdminManagement from "./pages/admin/adminManagment/adminManagmentPage";
 import ChangePassword from "./pages/admin/settings/settingsPage";
+import DepartmentManagementPage from "./pages/admin/department/departmentPage";
 import { AuthProvider } from "./context/AuthContext"; // Import AuthProvider
 
 function App() {
@@ -41,6 +42,10 @@ function App() {
               <Route path="" element={<ProductsPage />} />
               <Route path="management" element={<AdminManagement />} />
               <Route path="settings" element={<ChangePassword />} />
+              <Route
+                path="departments"
+                element={<DepartmentManagementPage />}
+              />
             </Route>
           </Routes>
 
