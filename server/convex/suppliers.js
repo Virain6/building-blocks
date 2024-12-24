@@ -1,4 +1,4 @@
-import { query } from "./_generated/server";
+import { query, mutation } from "./_generated/server";
 
 export const getAll = query(async ({ db }) => {
   return await db.query("suppliers").collect();
@@ -16,3 +16,67 @@ export const getById = query(async ({ db }, { id }) => {
 
   return supplier;
 });
+
+export const addSupplier = mutation(async ({ db }, { supplierName }) => {
+  if (!supplierName) {
+    throw new Error("Supplier name is required.");
+  }
+
+  const id = await db.insert("suppliers", { supplierName });
+  return { _id: id, supplierName };
+});
+
+export const updateSupplier = mutation(async ({ db }, { id, supplierName }) => {
+  if (!id || !supplierName) {
+    throw new Error("Supplier ID and name are required.");
+  }
+
+  // Update the supplier's name in the `suppliers` table
+  await db.patch(id, { supplierName });
+
+  // Fetch all products associated with this supplier
+  const productsToUpdate = await db
+    .query("products")
+    .filter((q) => q.eq(q.field("supplierID"), id))
+    .collect();
+
+  // Update the supplierName in all associated products
+  await Promise.all(
+    productsToUpdate.map(
+      (product) => db.patch(product._id, { supplierID: id }) // Ensure the supplierID remains consistent
+    )
+  );
+
+  return { _id: id, supplierName };
+});
+
+export const deleteSupplier = mutation(
+  async ({ db }, { id, defaultSupplierId }) => {
+    if (!id || !defaultSupplierId) {
+      throw new Error("Supplier ID and default supplier ID are required.");
+    }
+
+    const supplier = await db.get(id);
+    if (!supplier) {
+      throw new Error(`Supplier with ID ${id} not found.`);
+    }
+
+    // Fetch all products associated with this supplier
+    const productsToUpdate = await db
+      .query("products")
+      .filter((q) => q.eq(q.field("supplierID"), id))
+      .collect();
+
+    // Update all associated products to the default supplier
+    await Promise.all(
+      productsToUpdate.map((product) =>
+        db.patch(product._id, { supplierID: defaultSupplierId })
+      )
+    );
+
+    // Delete the supplier
+    await db.delete(id);
+
+    return { message: `Supplier with ID ${id} successfully deleted.` };
+  }
+);

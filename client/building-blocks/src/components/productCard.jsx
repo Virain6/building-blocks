@@ -10,22 +10,29 @@ const ProductCard = ({ product }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchDetails = async () => {
+    const fetchSupplier = async () => {
       try {
         const fetchedSupplier = await fetchSuppliersById(product.supplierID);
         setSupplier(fetchedSupplier);
+      } catch (error) {
+        console.error("Error fetching supplier by ID:", error);
+      }
+    };
 
+    const fetchDepartment = async () => {
+      try {
         const fetchedDepartment = await fetchDepartmentByCode(
           product.departmentCode
         );
         setDepartment(fetchedDepartment[0] || {});
       } catch (error) {
-        console.error("Error fetching product details:", error);
+        console.error("Error fetching department by code:", error);
       }
     };
 
-    fetchDetails();
-  }, []);
+    fetchSupplier();
+    fetchDepartment();
+  }, [product]);
 
   return (
     <div

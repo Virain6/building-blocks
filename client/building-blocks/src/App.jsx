@@ -12,6 +12,7 @@ import ProductsPage from "./pages/admin/product/productsPage"; // Import
 import AdminManagement from "./pages/admin/adminManagment/adminManagmentPage";
 import ChangePassword from "./pages/admin/settings/settingsPage";
 import DepartmentManagementPage from "./pages/admin/department/departmentPage";
+import SupplierManagementPage from "./pages/admin/supplier/supplierPage";
 import { AuthProvider } from "./context/AuthContext"; // Import AuthProvider
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
                 path="departments"
                 element={<DepartmentManagementPage />}
               />
+              <Route path="suppliers" element={<SupplierManagementPage />} />
             </Route>
           </Routes>
 
