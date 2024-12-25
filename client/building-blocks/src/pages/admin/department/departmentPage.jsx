@@ -6,6 +6,7 @@ import {
   editDepartment, // Add this to import
 } from "../../../utils/departmentApi";
 import DepartmentFormModal from "./DepartmentFormModal";
+import { toast } from "react-toastify";
 
 const DepartmentManagementPage = () => {
   const [departments, setDepartments] = useState([]);
