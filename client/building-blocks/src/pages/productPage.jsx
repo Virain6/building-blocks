@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { fetchProductById } from "../utils/productsApi";
-import { fetchSuppliersById } from "../utils/supplierApi.js";
-import { fetchDepartmentByCode } from "../utils/departmentApi.js";
 import { capitalizeWords } from "../utils/stringUtils.js";
 import { useCart } from "../context/cartContext";
 import PlusMinusButton from "../components/amountCart.jsx";
@@ -10,27 +8,17 @@ import PlusMinusButton from "../components/amountCart.jsx";
 const ProductDetails = () => {
   const { productId } = useParams(); // Get product ID from URL
   const [product, setProduct] = useState({});
-  const [supplier, setSupplier] = useState({});
-  const [department, setDepartment] = useState({});
   const [loading, setLoading] = useState(true);
 
   const { addToCart } = useCart();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDetails = async () => {
       try {
         const fetchedProduct = await fetchProductById(productId); // Fetch product details
         setProduct(fetchedProduct);
-
-        const fetchedSupplier = await fetchSuppliersById(
-          fetchedProduct.supplierID
-        );
-        setSupplier(fetchedSupplier);
-
-        const fetchedDepartment = await fetchDepartmentByCode(
-          fetchedProduct.departmentCode
-        );
-        setDepartment(fetchedDepartment[0] || {});
       } catch (error) {
         console.error("Error fetching product details:", error);
       } finally {
@@ -47,6 +35,27 @@ const ProductDetails = () => {
 
   return (
     <div className="container mx-auto p-6">
+      {/* Back Arrow */}
+      <button
+        onClick={() => navigate(-1)} // Navigate back to the previous page
+        className="flex items-center text-gray-700 hover:text-gray-900 mb-4"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6 mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+        Back
+      </button>
       <div className="flex flex-col md:flex-row gap-6">
         {/* Product Image */}
         <img
@@ -61,8 +70,8 @@ const ProductDetails = () => {
             {capitalizeWords(product.productName)}
           </h1>
           <h2 className="text-lg text-gray-600 mt-2">
-            {supplier.supplierName || "Unknown Supplier"} -{" "}
-            {department.departmentName || "Unknown Department"}
+            {product.supplierName || "Unknown Supplier"} -{" "}
+            {product.departmentName || "Unknown Department"}
           </h2>
           {product.discountPrice ? (
             <div className="mt-6">

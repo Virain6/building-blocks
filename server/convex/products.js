@@ -64,13 +64,26 @@ export const addProduct = mutation(async ({ db }, product) => {
     );
   }
 
+  // Fetch departmentName and supplierName
+  const department = await db
+    .query("department")
+    .filter((q) => q.eq(q.field("departmentCode"), departmentCode))
+    .first();
+
+  const supplier = await db.get(supplierID);
+
+  const departmentName = department?.departmentName || "Unknown Department";
+  const supplierName = supplier?.supplierName || "Unknown Supplier";
+
   const newProduct = {
     productName: productName.trim().toLowerCase(), // Convert to lowercase for consistency
     description: description?.trim() || "",
     price,
     stock: stock || 0,
     departmentCode,
+    departmentName, // New field
     supplierID: supplierID?.trim() || "",
+    supplierName, // New field
     leadTime: leadTime || 0,
     discountPrice: discountPrice || 0,
     status: status?.trim() || "available",
@@ -192,7 +205,40 @@ export const editProduct = mutation(async ({ db }, { id, updatedData }) => {
     throw new Error(`No product found with ID: ${id}`);
   }
 
-  await db.patch(id, updatedData);
+  // Fetch updated departmentName and supplierName if fields are updated
+  let updatedDepartmentName = existingProduct.departmentName;
+  let updatedSupplierName = existingProduct.supplierName;
+
+  if (
+    updatedData.departmentCode &&
+    updatedData.departmentCode !== existingProduct.departmentCode
+  ) {
+    const department = await db
+      .query("department")
+      .filter((q) =>
+        q.eq(q.field("departmentCode"), updatedData.departmentCode)
+      )
+      .first();
+    updatedDepartmentName = department?.departmentName || "Unknown Department";
+  }
+
+  if (
+    updatedData.supplierID &&
+    updatedData.supplierID !== existingProduct.supplierID
+  ) {
+    const supplier = await db.get(updatedData.supplierID);
+    updatedSupplierName = supplier?.supplierName || "Unknown Supplier";
+  }
+
+  // Include the updated departmentName and supplierName in the patch data
+  const patchData = {
+    ...updatedData,
+    departmentName: updatedDepartmentName,
+    supplierName: updatedSupplierName,
+    updatedAt: Date.now(),
+  };
+
+  await db.patch(id, patchData);
 
   return { message: "Product updated successfully" };
 });

@@ -118,9 +118,50 @@ const ProductsPage = () => {
   };
 
   const handleSaveProduct = (updatedProduct) => {
-    setProducts((prev) =>
-      prev.map((p) => (p._id === updatedProduct._id ? updatedProduct : p))
-    );
+    setProducts((prevProducts) => {
+      const updatedProducts = prevProducts.map((product) => {
+        if (product._id === updatedProduct._id) {
+          // Merge existing product with updated fields and derived fields
+          return {
+            ...product,
+            ...updatedProduct,
+            departmentName:
+              departmentMap[updatedProduct.departmentCode] ||
+              product.departmentName ||
+              "Unknown Department",
+            supplierName:
+              supplierMap[updatedProduct.supplierID] ||
+              product.supplierName ||
+              "Unknown Supplier",
+          };
+        }
+        return product;
+      });
+      return updatedProducts;
+    });
+    setIsModalOpen(false);
+    setSelectedProduct(null);
+  };
+
+  const handleAddProduct = (newProduct) => {
+    const completeProduct = {
+      _id: newProduct._id || Date.now().toString(), // Temporary ID if not provided
+      productName: newProduct.productName || "Unnamed Product",
+      price: newProduct.price || 0,
+      discountPrice: newProduct.discountPrice || 0,
+      leadTime: newProduct.leadTime || 0,
+      stock: newProduct.stock || 0,
+      departmentCode: newProduct.departmentCode || "",
+      supplierID: newProduct.supplierID || "",
+      status: newProduct.status || "available",
+      departmentName:
+        departmentMap[newProduct.departmentCode] || "Unknown Department",
+      supplierName: supplierMap[newProduct.supplierID] || "Unknown Supplier",
+      ...newProduct, // Include additional fields from the form
+    };
+
+    console.log(completeProduct._id);
+    setProducts((prevProducts) => [...prevProducts, completeProduct]);
     setIsModalOpen(false);
     setSelectedProduct(null);
   };
@@ -157,12 +198,8 @@ const ProductsPage = () => {
     const aValue = a[sortConfig.key];
     const bValue = b[sortConfig.key];
 
-    if (aValue < bValue) {
-      return sortConfig.direction === "asc" ? -1 : 1;
-    }
-    if (aValue > bValue) {
-      return sortConfig.direction === "asc" ? 1 : -1;
-    }
+    if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
+    if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
     return 0;
   });
 
@@ -303,11 +340,10 @@ const ProductsPage = () => {
                   <td className="px-4 py-2">${product.discountPrice}</td>
                   <td className="px-4 py-2">{product.leadTime}</td>
                   <td className="px-4 py-2">
-                    {departmentMap[product.departmentCode] ||
-                      "Unknown Department"}
+                    {product.departmentName || "Unknown Department"}
                   </td>
                   <td className="px-4 py-2">
-                    {supplierMap[product.supplierID] || "Unknown Supplier"}
+                    {product.supplierName || "Unknown Supplier"}
                   </td>
                   <td className="px-4 py-2">{product.status}</td>
                   <td className="px-4 py-2">
@@ -362,7 +398,15 @@ const ProductsPage = () => {
             setIsModalOpen(false);
             setSelectedProduct(null);
           }}
-          onSave={handleSaveProduct}
+          onSave={(updatedProduct) =>
+            selectedProduct
+              ? handleSaveProduct(updatedProduct)
+              : handleAddProduct(updatedProduct)
+          }
+          departments={departments}
+          suppliers={suppliers}
+          departmentMap={departmentMap}
+          supplierMap={supplierMap}
         />
       )}
     </div>

@@ -14,6 +14,8 @@ export default defineSchema({
     status: v.string(),
     stock: v.float64(),
     supplierID: v.string(),
+    supplierName: v.optional(v.string()), // New
+    departmentName: v.optional(v.string()), // New
     updatedAt: v.number(), // Store timestamps as numbers
   }),
 

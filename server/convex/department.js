@@ -54,14 +54,17 @@ export const deleteDepartment = mutation(async ({ db }, { id }) => {
     throw new Error("Default department not found.");
   }
 
-  // Update all products with the departmentCode of the department being deleted
+  // Update all products with the departmentCode and departmentName of the default department
   const productsToUpdate = await db
     .query("products")
     .filter((q) => q.eq(q.field("departmentCode"), department.departmentCode))
     .collect();
 
   for (const product of productsToUpdate) {
-    await db.patch(product._id, { departmentCode: DEFAULT_DEPARTMENT_CODE });
+    await db.patch(product._id, {
+      departmentCode: DEFAULT_DEPARTMENT_CODE,
+      departmentName: defaultDepartment.departmentName,
+    });
   }
 
   // Delete the department
@@ -93,7 +96,10 @@ export const updateDepartment = mutation(
       .collect();
 
     for (const product of productsToUpdate) {
-      await db.patch(product._id, { departmentCode });
+      await db.patch(product._id, {
+        departmentCode,
+        departmentName,
+      });
     }
 
     return { _id: id, departmentName, departmentCode };

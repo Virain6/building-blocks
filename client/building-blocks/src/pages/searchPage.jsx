@@ -8,7 +8,7 @@ import CustomDropdown from "../components/dropdown";
 import { useSearchParams } from "react-router-dom";
 
 const ProductSearch = () => {
-  const [searchParams] = useSearchParams(); // Get URL parameters
+  const [searchParams, setSearchParams] = useSearchParams(); // Get URL parameters
   const [searchTerm, setSearchTerm] = useState(searchParams.get("query") || "");
   const [departmentCode, setDepartmentCode] = useState(
     searchParams.get("departmentCode") || ""
@@ -24,7 +24,6 @@ const ProductSearch = () => {
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const limit = 20;
-
   // Load departments on mount
   useEffect(() => {
     const loadDepartments = async () => {
@@ -115,6 +114,8 @@ const ProductSearch = () => {
       setProducts(results);
       setTotal(total);
       setPage(newPage);
+
+      setSearchParams("");
     } catch (error) {
       console.error("Error searching products:", error);
     } finally {

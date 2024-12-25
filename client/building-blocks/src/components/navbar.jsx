@@ -153,7 +153,7 @@ const Navbar = () => {
               </button>
             </div>
           </div>
-          <Link to="/cart" className="relative">
+          <Link to="/cart" className="relative group">
             {/* Cart Icon */}
             <button className="block focus:outline-none">
               <svg
@@ -163,7 +163,7 @@ const Navbar = () => {
                 xmlns="http://www.w3.org/2000/svg"
                 xmlnsXlink="http://www.w3.org/1999/xlink"
                 viewBox="0 0 902.86 902.86"
-                className="h-8 w-8"
+                className="h-8 w-8 group-hover:scale-110 transition-transform duration-200"
               >
                 <g>
                   <g>
@@ -175,7 +175,7 @@ const Navbar = () => {
             </button>
             {/* Badge for Item Count */}
             {cartCount > 0 && (
-              <span className="absolute bottom-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+              <span className="absolute bottom-0 right-0 bg-green-500 group-hover:bg-green-700 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center transition-colors duration-200">
                 {cartCount}
               </span>
             )}

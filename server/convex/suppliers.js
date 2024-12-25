@@ -42,8 +42,10 @@ export const updateSupplier = mutation(async ({ db }, { id, supplierName }) => {
 
   // Update the supplierName in all associated products
   await Promise.all(
-    productsToUpdate.map(
-      (product) => db.patch(product._id, { supplierID: id }) // Ensure the supplierID remains consistent
+    productsToUpdate.map((product) =>
+      db.patch(product._id, {
+        supplierName, // Update the supplierName in the product
+      })
     )
   );
 
@@ -61,16 +63,27 @@ export const deleteSupplier = mutation(
       throw new Error(`Supplier with ID ${id} not found.`);
     }
 
-    // Fetch all products associated with this supplier
+    // Fetch the default supplier to get its name
+    const defaultSupplier = await db.get(defaultSupplierId);
+    if (!defaultSupplier) {
+      throw new Error(
+        `Default supplier with ID ${defaultSupplierId} not found.`
+      );
+    }
+
+    // Fetch all products associated with the supplier being deleted
     const productsToUpdate = await db
       .query("products")
       .filter((q) => q.eq(q.field("supplierID"), id))
       .collect();
 
-    // Update all associated products to the default supplier
+    // Update all associated products to the default supplier's ID and name
     await Promise.all(
       productsToUpdate.map((product) =>
-        db.patch(product._id, { supplierID: defaultSupplierId })
+        db.patch(product._id, {
+          supplierID: defaultSupplierId,
+          supplierName: defaultSupplier.supplierName,
+        })
       )
     );
 

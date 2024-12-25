@@ -5,7 +5,7 @@ import {
   deleteDepartment,
   editDepartment, // Add this to import
 } from "../../../utils/departmentApi";
-import DepartmentFormModal from "./DepartmentFormModal";
+import DepartmentFormModal from "./departmentFormModal";
 import { toast } from "react-toastify";
 
 const DepartmentManagementPage = () => {

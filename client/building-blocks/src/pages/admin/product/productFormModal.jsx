@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { fetchDepartments } from "../../../utils/departmentApi";
-import { fetchSuppliers } from "../../../utils/supplierApi";
 import { addProduct, editProduct } from "../../../utils/productsApi";
 import { capitalizeWords } from "../../../utils/stringUtils.js";
 import { toast } from "react-toastify";
 
-const ProductFormModal = ({ product, onClose, onSave }) => {
+const ProductFormModal = ({
+  product,
+  onClose,
+  onSave,
+  departments,
+  suppliers,
+  departmentMap,
+  supplierMap,
+}) => {
   const [formData, setFormData] = useState(
     product || {
       productName: "",
@@ -19,34 +25,7 @@ const ProductFormModal = ({ product, onClose, onSave }) => {
       status: "available",
     }
   );
-
-  const [departments, setDepartments] = useState([]);
-  const [suppliers, setSuppliers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  // Fetch departments and suppliers on mount
-  useEffect(() => {
-    const loadDepartments = async () => {
-      try {
-        const data = await fetchDepartments();
-        setDepartments(data);
-      } catch (error) {
-        console.error("Error fetching departments:", error);
-      }
-    };
-
-    const loadSuppliers = async () => {
-      try {
-        const data = await fetchSuppliers();
-        setSuppliers(data);
-      } catch (error) {
-        console.error("Error fetching suppliers:", error);
-      }
-    };
-
-    loadDepartments();
-    loadSuppliers();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -66,16 +45,28 @@ const ProductFormModal = ({ product, onClose, onSave }) => {
     e.preventDefault();
     setIsLoading(true);
     try {
+      let savedProduct;
+      let completeProduct;
       if (product) {
         // Edit existing product
-        await editProduct(product._id, formData);
+        savedProduct = await editProduct(product._id, formData);
         toast.success("Product updated successfully!");
+        // Create a complete product object
+        completeProduct = formData;
       } else {
         // Add new product
-        const newProduct = await addProduct(formData);
+        savedProduct = await addProduct(formData);
         toast.success("Product added successfully!");
-        onSave(newProduct);
+
+        // Create a complete product object
+        completeProduct = {
+          ...formData, // Include form data
+          _id: savedProduct, // Ensure the correct ID is added
+        };
       }
+
+      // Call the passed function to update the parent state
+      onSave(completeProduct);
       onClose();
     } catch (error) {
       console.error("Error saving product:", error);
@@ -174,8 +165,8 @@ const ProductFormModal = ({ product, onClose, onSave }) => {
               >
                 <option value="">Select Department</option>
                 {departments.map((dept) => (
-                  <option key={dept._id} value={dept.departmentCode}>
-                    {dept.departmentName}
+                  <option key={dept.value} value={dept.value}>
+                    {dept.label}
                   </option>
                 ))}
               </select>
@@ -188,8 +179,8 @@ const ProductFormModal = ({ product, onClose, onSave }) => {
               >
                 <option value="">Select Supplier</option>
                 {suppliers.map((supplier) => (
-                  <option key={supplier._id} value={supplier._id}>
-                    {supplier.supplierName}
+                  <option key={supplier.value} value={supplier.value}>
+                    {supplier.label}
                   </option>
                 ))}
               </select>
