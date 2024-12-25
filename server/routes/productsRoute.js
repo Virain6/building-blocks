@@ -36,6 +36,22 @@ router.get("/searchID/:id", async (req, res) => {
   }
 });
 
+router.post("/batchFetch", async (req, res) => {
+  const { ids } = req.body;
+
+  if (!Array.isArray(ids) || ids.length === 0) {
+    return res.status(400).json({ error: "Invalid or empty IDs array" });
+  }
+
+  try {
+    const products = await client.query(api.products.fetchByIds, { ids });
+    res.json(products);
+  } catch (error) {
+    console.error("Error fetching products by IDs:", error);
+    res.status(500).json({ error: "Failed to fetch products by IDs" });
+  }
+});
+
 router.get("/latest/:limit", async (req, res) => {
   try {
     const limit = parseInt(req.params.limit, 10); // Get the limit from the route parameter

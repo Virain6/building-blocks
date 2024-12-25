@@ -10,6 +10,16 @@ export const fetchProductById = async (id) => {
   return response.data;
 };
 
+export const fetchProductsByIds = async (ids) => {
+  try {
+    const response = await axios.post("/products/batchFetch", { ids });
+    return response.data; // Returns the list of products
+  } catch (error) {
+    console.error("Error fetching products by IDs:", error);
+    throw error;
+  }
+};
+
 export const fetchLatestProducts = async (limit) => {
   if (!Number.isInteger(limit) || limit <= 0) {
     throw new Error("Invalid limit parameter. It must be a positive integer.");

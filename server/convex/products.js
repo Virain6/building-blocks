@@ -17,6 +17,17 @@ export const getById = query(async ({ db }, { id }) => {
   return product;
 });
 
+export const fetchByIds = query(async ({ db }, { ids }) => {
+  if (!Array.isArray(ids) || ids.length === 0) {
+    throw new Error("Invalid or empty IDs array");
+  }
+
+  return await db
+    .query("products")
+    .filter((q) => q.in(q.field("_id"), ids))
+    .collect();
+});
+
 export const getLatestProducts = query(async ({ db }, { limit }) => {
   const products = await db
     .query("products")

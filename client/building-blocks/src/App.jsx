@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/navbar";
 import LandingPage from "./pages/landingPage";
+import CartPage from "./pages/cartPage";
 import Footer from "./components/footer";
 import ProductSearch from "./pages/searchPage";
 import ProductDetails from "./pages/productPage";
@@ -14,6 +15,7 @@ import ChangePassword from "./pages/admin/settings/settingsPage";
 import DepartmentManagementPage from "./pages/admin/department/departmentPage";
 import SupplierManagementPage from "./pages/admin/supplier/supplierPage";
 import { AuthProvider } from "./context/AuthContext"; // Import AuthProvider
+import { CartProvider } from "./context/cartContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -22,41 +24,44 @@ function App() {
     <AuthProvider>
       {" "}
       {/* Wrap the entire app in AuthProvider */}
-      <Router>
-        <div className="min-h-screen flex flex-col">
-          <ToastContainer position="top-right" autoClose={3000} />
-          <Navbar />
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/search" element={<ProductSearch />} />
-            <Route path="/product/:productId" element={<ProductDetails />} />
-            <Route path="/login" element={<Login />} />{" "}
-            <Route path="/register" element={<RegisterPage />} />
-            {/* Public login route */}
-            {/* Protected Routes */}
-            <Route
-              path="/admin"
-              element={
-                <PrivateRoute>
-                  <AdminRouter />
-                </PrivateRoute>
-              }
-            >
-              <Route path="" element={<ProductsPage />} />
-              <Route path="management" element={<AdminManagement />} />
-              <Route path="settings" element={<ChangePassword />} />
+      <CartProvider>
+        <Router>
+          <div className="min-h-screen flex flex-col">
+            <ToastContainer position="top-right" autoClose={3000} />
+            <Navbar />
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/search" element={<ProductSearch />} />
+              <Route path="/product/:productId" element={<ProductDetails />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/login" element={<Login />} />{" "}
+              <Route path="/register" element={<RegisterPage />} />
+              {/* Public login route */}
+              {/* Protected Routes */}
               <Route
-                path="departments"
-                element={<DepartmentManagementPage />}
-              />
-              <Route path="suppliers" element={<SupplierManagementPage />} />
-            </Route>
-          </Routes>
+                path="/admin"
+                element={
+                  <PrivateRoute>
+                    <AdminRouter />
+                  </PrivateRoute>
+                }
+              >
+                <Route path="" element={<ProductsPage />} />
+                <Route path="management" element={<AdminManagement />} />
+                <Route path="settings" element={<ChangePassword />} />
+                <Route
+                  path="departments"
+                  element={<DepartmentManagementPage />}
+                />
+                <Route path="suppliers" element={<SupplierManagementPage />} />
+              </Route>
+            </Routes>
 
-          <Footer />
-        </div>
-      </Router>
+            <Footer />
+          </div>
+        </Router>
+      </CartProvider>
     </AuthProvider>
   );
 }

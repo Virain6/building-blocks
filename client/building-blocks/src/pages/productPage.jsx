@@ -4,7 +4,7 @@ import { fetchProductById } from "../utils/productsApi";
 import { fetchSuppliersById } from "../utils/supplierApi.js";
 import { fetchDepartmentByCode } from "../utils/departmentApi.js";
 import { capitalizeWords } from "../utils/stringUtils.js";
-import { addToCart } from "../localStorage/manageLocalStorage.js";
+import { useCart } from "../context/cartContext";
 import PlusMinusButton from "../components/amountCart.jsx";
 
 const ProductDetails = () => {
@@ -13,6 +13,8 @@ const ProductDetails = () => {
   const [supplier, setSupplier] = useState({});
   const [department, setDepartment] = useState({});
   const [loading, setLoading] = useState(true);
+
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -83,11 +85,12 @@ const ProductDetails = () => {
           <p className="text-lg text-gray-700 mt-2">
             <strong>Status:</strong> {product.status || "Unknown"}
           </p>
-          <p className="text-gray-800 mt-6 whitespace-pre-line">
+          <p className="text-gray-800 mt-6 mb-6 whitespace-pre-line">
             {product.description}
           </p>
           <PlusMinusButton
             product={product}
+            initialCount={1}
             buttonName="Add to Cart"
             onChange={addToCart}
           />
