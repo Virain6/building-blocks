@@ -4,6 +4,7 @@ import { fetchProductById } from "../utils/productsApi";
 import { fetchSuppliersById } from "../utils/supplierApi.js";
 import { fetchDepartmentByCode } from "../utils/departmentApi.js";
 import { capitalizeWords } from "../utils/stringUtils.js";
+import { addToCart } from "../localStorage/manageLocalStorage.js";
 
 const ProductDetails = () => {
   const { productId } = useParams(); // Get product ID from URL
@@ -74,7 +75,7 @@ const ProductDetails = () => {
           )}
           {/* Wait Time */}
           <p className="text-lg text-gray-700 mt-6">
-            <strong>Wait Time:</strong> {product.leadTime || "Not Specified"}
+            <strong>Lead Time:</strong> {product.leadTime || "Not Specified"}
           </p>
 
           {/* Status */}
