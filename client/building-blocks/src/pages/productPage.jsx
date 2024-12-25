@@ -5,6 +5,7 @@ import { fetchSuppliersById } from "../utils/supplierApi.js";
 import { fetchDepartmentByCode } from "../utils/departmentApi.js";
 import { capitalizeWords } from "../utils/stringUtils.js";
 import { addToCart } from "../localStorage/manageLocalStorage.js";
+import PlusMinusButton from "../components/amountCart.jsx";
 
 const ProductDetails = () => {
   const { productId } = useParams(); // Get product ID from URL
@@ -85,6 +86,11 @@ const ProductDetails = () => {
           <p className="text-gray-800 mt-6 whitespace-pre-line">
             {product.description}
           </p>
+          <PlusMinusButton
+            product={product}
+            buttonName="Add to Cart"
+            onChange={addToCart}
+          />
         </div>
       </div>
     </div>

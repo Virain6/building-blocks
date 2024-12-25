@@ -3,6 +3,10 @@ const key = "keystone_Cart";
 
 export const addToCart = (product, quantity) => {
   try {
+    if (product.status === "unavailable") {
+      return toast.error("Product is unavailable");
+    }
+
     const prod = { id: product._id, quantity: quantity };
     let cart = [];
 
@@ -57,6 +61,9 @@ export const removeFromCart = (product) => {
 
 export const updateCart = (product, quantity) => {
   try {
+    if (product.status === "unavailable") {
+      return toast.error("Product is unavailable");
+    }
     if (localStorage.getItem(key)) {
       let cart = JSON.parse(localStorage.getItem(key));
       const index = cart.findIndex((item) => item.id === product._id);
