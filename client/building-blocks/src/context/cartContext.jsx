@@ -161,12 +161,19 @@ export const CartProvider = ({ children }) => {
     }, 0);
   };
 
+  const getMaxLeadTime = () => {
+    return products.reduce((maxLeadTime, product) => {
+      return Math.max(maxLeadTime, product.leadTime || 0);
+    }, 0);
+  };
+
   return (
     <CartContext.Provider
       value={{
         cart,
         products,
         addToCart,
+        getMaxLeadTime,
         removeFromCart,
         updateCart,
         getNumItems,

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { toast } from "react-toastify";
 
 const PlusMinusButton = ({
   initialCount = 0,
@@ -9,6 +8,14 @@ const PlusMinusButton = ({
   buttonName,
 }) => {
   const [quantity, setQuantity] = useState(initialCount);
+  const [isModified, setIsModified] = useState(false);
+
+  useEffect(() => {
+    if (buttonName === "Update") {
+      // Check if the quantity is modified from the initial count
+      setIsModified(quantity !== initialCount);
+    }
+  }, [quantity, initialCount, buttonName]);
 
   const handleDecrease = () => {
     if (quantity > min) {
@@ -22,6 +29,17 @@ const PlusMinusButton = ({
 
   return (
     <div className="flex items-center space-x-2">
+      {buttonName === "Update" && isModified && (
+        <button
+          onClick={() => {
+            onChange(product, quantity);
+            setIsModified(false); // Reset modification state
+          }}
+          className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+        >
+          {buttonName}
+        </button>
+      )}
       <div className="flex items-center space-x-2 rounded bg-gray-100">
         <button
           onClick={handleDecrease}
@@ -39,12 +57,14 @@ const PlusMinusButton = ({
           +
         </button>
       </div>
-      <button
-        onClick={() => onChange(product, quantity)}
-        className="bg-amber-500 text-white px-4 py-2 rounded-lg"
-      >
-        {buttonName}
-      </button>
+      {buttonName !== "Update" && (
+        <button
+          onClick={() => onChange(product, quantity)}
+          className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+        >
+          {buttonName}
+        </button>
+      )}
     </div>
   );
 };

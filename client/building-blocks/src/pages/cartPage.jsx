@@ -1,13 +1,25 @@
 import React from "react";
 import { useCart } from "../context/cartContext";
 import PlusMinusButton from "../components/amountCart";
+import { useNavigate } from "react-router-dom";
 
 const CartPage = () => {
-  const { cart, products, updateCart, removeFromCart, getTotalCost } =
-    useCart();
+  const {
+    cart,
+    products,
+    updateCart,
+    removeFromCart,
+    getTotalCost,
+    getMaxLeadTime,
+  } = useCart();
+
+  const navigate = useNavigate();
 
   return (
-    <div className="container mx-auto p-4">
+    <div
+      className="container mx-auto p-4"
+      style={{ minHeight: "calc(100vh - 13rem)" }}
+    >
       <h1 className="text-3xl font-bold mb-4">Your Cart</h1>
 
       {cart.length === 0 ? (
@@ -24,9 +36,37 @@ const CartPage = () => {
                   key={product._id}
                   className="border p-4 rounded shadow mb-4"
                 >
-                  <h2 className="text-xl font-semibold">
-                    {product.productName}
-                  </h2>
+                  <div className="flex justify-between items-center">
+                    {/* Product Name */}
+                    <h2
+                      className="text-xl font-semibold hover:underline"
+                      onClick={() => navigate(`/product/${product._id}`)}
+                    >
+                      {product.productName}
+                    </h2>
+
+                    {/* PlusMinusButton and Remove Button */}
+                    <div className="flex items-center space-x-4">
+                      <PlusMinusButton
+                        initialCount={item.quantity}
+                        min={1}
+                        product={product}
+                        onChange={(product, quantity) =>
+                          updateCart(product, quantity)
+                        }
+                        buttonName="Update"
+                      />
+                      <button
+                        onClick={() => removeFromCart(product)}
+                        className="text-red-500 hover:text-red-700 text-xl font-bold px-2 py-1 rounded focus:outline-none"
+                        aria-label="Remove from cart"
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Price Section */}
                   <p>
                     Price:
                     {product.discountPrice ? (
@@ -42,23 +82,6 @@ const CartPage = () => {
                       `$${product.price}`
                     )}
                   </p>
-                  <div className="flex items-center space-x-4 mt-4">
-                    <PlusMinusButton
-                      initialCount={item.quantity}
-                      min={1}
-                      product={product}
-                      onChange={(product, quantity) =>
-                        updateCart(product, quantity)
-                      }
-                      buttonName="Update"
-                    />
-                    <button
-                      onClick={() => removeFromCart(product)}
-                      className="bg-red-500 text-white px-4 py-2 rounded"
-                    >
-                      Remove
-                    </button>
-                  </div>
                 </div>
               );
             })}
@@ -67,6 +90,18 @@ const CartPage = () => {
             <h2 className="text-2xl font-bold mb-4 text-gray-700">
               Order Summary
             </h2>
+            <div className="mb-4">
+              <p className="text-gray-600">
+                <span className="font-bold text-gray-700">
+                  Estimated Lead Time:
+                </span>{" "}
+                {getMaxLeadTime()} days
+              </p>
+              <p className="text-sm text-gray-500">
+                The estimated lead time is almost always accurate. You will
+                receive an email after ordering when the lead time is confirmed.
+              </p>
+            </div>
             <div className="flex justify-between items-center mb-3">
               <p className="text-gray-600">Subtotal</p>
               <p className="text-gray-800 font-semibold">
