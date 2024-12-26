@@ -26,6 +26,7 @@ export default defineSchema({
 
   orderDetails: defineTable({
     custEmail: v.string(),
+    custNum: v.optional(v.number()),
     custName: v.string(),
     orderDate: v.string(),
     pickUpDate: v.string(),
