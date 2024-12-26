@@ -19,13 +19,6 @@ export default defineSchema({
     updatedAt: v.number(), // Store timestamps as numbers
   }),
 
-  orderItems: defineTable({
-    orderID: v.string(),
-    price_per_unit: v.float64(),
-    productID: v.string(),
-    quantity: v.float64(),
-  }),
-
   department: defineTable({
     departmentCode: v.string(),
     departmentName: v.string(),
@@ -38,12 +31,14 @@ export default defineSchema({
     pickUpDate: v.string(),
     productsArray: v.array(
       v.object({
-        productID: v.string(),
+        productName: v.string(),
         quantity: v.float64(),
+        currentPricePerItem: v.float64(), // Capture the price at the time of the order
       })
     ),
     status: v.string(),
     totalPrice: v.float64(),
+    notes: v.optional(v.string()), // New
   }),
 
   suppliers: defineTable({ supplierName: v.string() }),
