@@ -2,6 +2,7 @@ import React from "react";
 import { useCart } from "../context/cartContext";
 import PlusMinusButton from "../components/amountCart";
 import { useNavigate } from "react-router-dom";
+import { capitalizeWords } from "../utils/stringUtils.js";
 
 const CartPage = () => {
   const {
@@ -42,7 +43,7 @@ const CartPage = () => {
                       className="text-xl font-semibold hover:underline"
                       onClick={() => navigate(`/product/${product._id}`)}
                     >
-                      {product.productName}
+                      {capitalizeWords(product.productName)}
                     </h2>
 
                     {/* PlusMinusButton and Remove Button */}
@@ -90,6 +91,38 @@ const CartPage = () => {
             <h2 className="text-2xl font-bold mb-4 text-gray-700">
               Order Summary
             </h2>
+            {/* Email and Phone Input */}
+            <div className="mb-4">
+              <label
+                htmlFor="email"
+                className="block text-gray-700 font-semibold mb-1"
+              >
+                Email Address
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                className="w-full px-4 py-2 border rounded-md text-gray-800"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="phone"
+                className="block text-gray-700 font-semibold mb-1"
+              >
+                Phone Number (Optional)
+              </label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="Enter your phone number"
+                className="w-full px-4 py-2 border rounded-md text-gray-800"
+              />
+            </div>
             <div className="mb-4">
               <p className="text-gray-600">
                 <span className="font-bold text-gray-700">
@@ -102,6 +135,7 @@ const CartPage = () => {
                 receive an email after ordering when the lead time is confirmed.
               </p>
             </div>
+
             <div className="flex justify-between items-center mb-3">
               <p className="text-gray-600">Subtotal</p>
               <p className="text-gray-800 font-semibold">
@@ -119,6 +153,14 @@ const CartPage = () => {
               <p className="text-lg font-bold text-gray-700">Total</p>
               <p className="text-lg font-bold text-orange-600">
                 ${(getTotalCost() * 1.13).toFixed(2)}
+              </p>
+            </div>
+            <div className="mt-4">
+              <p className="text-gray-600">
+                <span className="font-bold text-gray-700">Please Read</span>
+              </p>
+              <p className="text-sm text-gray-500">
+                By placing this order you confirm blash blah blah
               </p>
             </div>
             <button

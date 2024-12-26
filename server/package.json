@@ -4,7 +4,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"node server.js\" \"npx convex dev\""
   },
   "keywords": [],
   "author": "",
@@ -19,6 +20,7 @@
     "firebase-admin": "^13.0.2"
   },
   "devDependencies": {
+    "concurrently": "^9.1.0",
     "nodemon": "^3.1.9"
   }
 }
