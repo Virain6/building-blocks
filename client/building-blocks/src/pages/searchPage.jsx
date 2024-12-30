@@ -16,7 +16,7 @@ const ProductSearch = () => {
   const [supplierID, setSupplierID] = useState(
     searchParams.get("supplierID") || ""
   );
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("available");
   const [products, setProducts] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
@@ -83,7 +83,7 @@ const ProductSearch = () => {
             searchTerm: searchParams.get("query") || "",
             departmentCode: searchParams.get("departmentCode") || "",
             supplierID: searchParams.get("supplierID") || "",
-            status,
+            status: searchParams.get("status") || "available",
             page: 0,
             limit,
           });
@@ -106,7 +106,7 @@ const ProductSearch = () => {
       const { results, total } = await searchProducts({
         searchTerm,
         departmentCode,
-        status,
+        status: status || "available",
         supplierID,
         page: newPage,
         limit,
@@ -163,7 +163,7 @@ const ProductSearch = () => {
               { value: "available", label: "Available" },
               { value: "unavailable", label: "Unavailable" },
             ]}
-            placeholder="Any Status"
+            placeholder="Available"
           />
 
           {/* Supplier Dropdown */}

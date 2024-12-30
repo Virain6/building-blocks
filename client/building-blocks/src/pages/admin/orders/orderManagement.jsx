@@ -115,7 +115,10 @@ const OrderManagementPage = () => {
           {viewCompleted ? "Completed Orders" : "Pending Orders"}
         </h2>
         {orders.map((order) => (
-          <div key={order._id} className="border-b py-4 flex justify-between">
+          <div
+            key={order._id}
+            className="border-b py-4 flex justify-between hover:bg-gray-200"
+          >
             <div>
               <p>
                 <strong>Order ID:</strong> {order._id}
