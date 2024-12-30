@@ -17,6 +17,7 @@ export default defineSchema({
     supplierName: v.optional(v.string()), // New
     departmentName: v.optional(v.string()), // New
     updatedAt: v.number(), // Store timestamps as numbers
+    barcodeID: v.optional(v.string()), // New
   }),
 
   department: defineTable({
@@ -35,11 +36,14 @@ export default defineSchema({
         productName: v.string(),
         quantity: v.float64(),
         currentPricePerItem: v.float64(), // Capture the price at the time of the order
+        supplierName: v.optional(v.string()),
+        departmentName: v.optional(v.string()),
+        barcodeID: v.optional(v.string()),
       })
     ),
     status: v.string(),
     totalPrice: v.float64(),
-    notes: v.optional(v.string()), // New
+    notes: v.optional(v.string()),
   }),
 
   suppliers: defineTable({ supplierName: v.string() }),

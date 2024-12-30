@@ -42,10 +42,9 @@ const CartPage = () => {
       custName: name.trim().toLowerCase(),
       custNum: rawPhoneNumber ? parseFloat(rawPhoneNumber) : null,
       productsArray: [],
-      totalPrice: getTotalCost(),
+      totalPrice: (getTotalCost() * 1.13).toFixed(2),
     };
 
-    // Map products to productsArray
     products.forEach((product) => {
       const cartItem = cart.find((item) => item.id === product._id);
       if (cartItem) {
@@ -53,6 +52,9 @@ const CartPage = () => {
           productName: product.productName,
           quantity: cartItem.quantity,
           currentPricePerItem: product.discountPrice || product.price,
+          supplierName: product.supplierName || "Unknown Supplier",
+          departmentName: product.departmentName || "Unknown Department",
+          barcodeID: product.barcodeID || "N/A",
         });
       }
     });

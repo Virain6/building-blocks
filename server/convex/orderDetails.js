@@ -33,6 +33,9 @@ export const addOrder = mutation(async ({ db }, order) => {
       productName: product.productName.trim(),
       quantity: product.quantity,
       currentPricePerItem: product.currentPricePerItem,
+      supplierName: product.supplierName || "Unknown Supplier",
+      departmentName: product.departmentName || "Unknown Department",
+      barcodeID: product.barcodeID || "N/A",
     })),
     totalPrice,
     status: "pending", // Default status

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { updateOrderStatus } from "../../../utils/orderApi";
 import { capitalizeWords } from "../../../utils/stringUtils";
+import { toast } from "react-toastify";
 
 const EditOrderModal = ({ order, onClose, onSave }) => {
   const [formData, setFormData] = useState({ ...order });
@@ -14,7 +15,12 @@ const EditOrderModal = ({ order, onClose, onSave }) => {
 
   const handleProductChange = (index, field, value) => {
     const updatedProducts = [...formData.productsArray];
-    updatedProducts[index][field] = parseFloat(value) || 0;
+    // Apply parseFloat only for numeric fields
+    if (["quantity", "currentPricePerItem"].includes(field)) {
+      updatedProducts[index][field] = parseFloat(value) || 0;
+    } else {
+      updatedProducts[index][field] = value;
+    }
     const updatedTotal = updatedProducts.reduce(
       (sum, product) => sum + product.quantity * product.currentPricePerItem,
       0
@@ -22,7 +28,7 @@ const EditOrderModal = ({ order, onClose, onSave }) => {
     setFormData((prev) => ({
       ...prev,
       productsArray: updatedProducts,
-      totalPrice: parseFloat(updatedTotal.toFixed(2)), // excluding 13% tax
+      totalPrice: parseFloat((updatedTotal * 1.13).toFixed(2)), // excluding 13% tax
     }));
   };
 
@@ -33,9 +39,11 @@ const EditOrderModal = ({ order, onClose, onSave }) => {
         custName: formData.custName.toLowerCase(),
       };
       const updatedOrder = await updateOrderStatus(order._id, updatedFormData);
+      toast.success("Order updated successfully!");
       onSave(updatedOrder);
     } catch (error) {
       console.error("Failed to update order:", error.message);
+      toast.error("Failed to update order");
     }
   };
 
@@ -149,6 +157,61 @@ const EditOrderModal = ({ order, onClose, onSave }) => {
                       />
                     </div>
                   </div>
+                  <div className="flex space-x-4 items-center">
+                    <div className="flex-1">
+                      <label className="block text-sm font-semibold">
+                        Supplier Name
+                      </label>
+                      <input
+                        type="text"
+                        value={product.supplierName}
+                        onChange={(e) =>
+                          handleProductChange(
+                            index,
+                            "supplierName",
+                            e.target.value
+                          )
+                        }
+                        className="w-full px-4 py-2 border rounded-md"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <label className="block text-sm font-semibold">
+                        Department Name
+                      </label>
+                      <input
+                        type="text"
+                        value={product.departmentName}
+                        onChange={(e) =>
+                          handleProductChange(
+                            index,
+                            "departmentName",
+                            e.target.value
+                          )
+                        }
+                        className="w-full px-4 py-2 border rounded-md"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex space-x-4 items-center">
+                    <div className="flex-1">
+                      <label className="block text-sm font-semibold">
+                        Barcode ID
+                      </label>
+                      <input
+                        type="text"
+                        value={product.barcodeID}
+                        onChange={(e) =>
+                          handleProductChange(
+                            index,
+                            "barcodeID",
+                            e.target.value
+                          )
+                        }
+                        className="w-full px-4 py-2 border rounded-md"
+                      />
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -171,6 +234,19 @@ const EditOrderModal = ({ order, onClose, onSave }) => {
           <div className="text-lg font-bold text-right">
             Total (with tax): ${formData.totalPrice.toFixed(2)}
           </div>
+        </div>
+
+        <div>
+          <h3 className="text-lg font-semibold mb-2">Status</h3>
+          <select
+            name="status"
+            value={formData.status}
+            onChange={(e) => handleInputChange("status", e.target.value)}
+            className="w-full px-4 py-2 border rounded-md"
+          >
+            <option value="pending">Pending</option>
+            <option value="completed">Completed</option>
+          </select>
         </div>
 
         {/* Actions */}

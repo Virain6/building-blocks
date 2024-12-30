@@ -4,6 +4,8 @@ import { ConvexHttpClient } from "convex/browser";
 import { api } from "../convex/_generated/api.js"; // Adjust path as needed
 import rateLimit from "express-rate-limit";
 import { sendEmail } from "../mailer.js"; // Adjust the path as needed
+import { verifyTokenMiddleware } from "../middleware/authMiddleware.js";
+import { isAdminMiddleware } from "../middleware/isAdminMiddleware.js";
 
 // Load environment variables from .env.local
 dotenv.config({ path: ".env.local" });
@@ -61,22 +63,27 @@ router.get("/completed", async (req, res) => {
 });
 
 // Update an order
-router.put("/update/:orderId", async (req, res) => {
-  try {
-    const { orderId } = req.params;
-    const updates = req.body;
+router.put(
+  "/update/:orderId",
+  verifyTokenMiddleware, // Ensure token is valid
+  isAdminMiddleware, // Ensure user is admin
+  async (req, res) => {
+    try {
+      const { orderId } = req.params;
+      const updates = req.body;
 
-    const updatedOrder = await client.mutation(api.orderDetails.updateOrder, {
-      orderId,
-      updates,
-    });
+      const updatedOrder = await client.mutation(api.orderDetails.updateOrder, {
+        orderId,
+        updates,
+      });
 
-    res.status(200).json(updatedOrder);
-  } catch (error) {
-    console.error("Error updating order:", error.message);
-    res.status(500).json({ error: "Failed to update order" });
+      res.status(200).json(updatedOrder);
+    } catch (error) {
+      console.error("Error updating order:", error.message);
+      res.status(500).json({ error: "Failed to update order" });
+    }
   }
-});
+);
 
 router.get("/search", async (req, res) => {
   try {
@@ -97,29 +104,34 @@ router.get("/search", async (req, res) => {
   }
 });
 
-router.post("/add", orderLimiter, async (req, res) => {
-  try {
-    const order = req.body;
+router.post(
+  "/add",
+  orderLimiter,
+  verifyTokenMiddleware, // Ensure token is valid
+  isAdminMiddleware, // Ensure user is admin
+  async (req, res) => {
+    try {
+      const order = req.body;
 
-    // Basic validation
-    if (
-      !order.custEmail ||
-      !order.custName ||
-      !order.productsArray ||
-      !order.totalPrice
-    ) {
-      return res.status(400).json({
-        error:
-          "Missing required fields: custEmail, custName, productsArray, or totalPrice",
-      });
-    }
+      // Basic validation
+      if (
+        !order.custEmail ||
+        !order.custName ||
+        !order.productsArray ||
+        !order.totalPrice
+      ) {
+        return res.status(400).json({
+          error:
+            "Missing required fields: custEmail, custName, productsArray, or totalPrice",
+        });
+      }
 
-    // Call the Convex mutation
-    const newOrder = await client.mutation(api.orderDetails.addOrder, order);
+      // Call the Convex mutation
+      const newOrder = await client.mutation(api.orderDetails.addOrder, order);
 
-    // Send email to the customer
-    const emailSubject = "Order Confirmation";
-    const emailContent = `
+      // Send email to the customer
+      const emailSubject = "Order Confirmation";
+      const emailContent = `
 <!DOCTYPE html>
 <html>
   <head>
@@ -238,17 +250,18 @@ router.post("/add", orderLimiter, async (req, res) => {
   </body>
 </html>
 `;
-    await sendEmail(order.custEmail, emailSubject, emailContent);
+      await sendEmail(order.custEmail, emailSubject, emailContent);
 
-    res.status(201).json({
-      message: "Order successfully added",
-      order: newOrder,
-    });
-  } catch (error) {
-    console.error("Error adding order:", error);
-    res.status(500).json({ error: "Failed to add order" });
+      res.status(201).json({
+        message: "Order successfully added",
+        order: newOrder,
+      });
+    } catch (error) {
+      console.error("Error adding order:", error);
+      res.status(500).json({ error: "Failed to add order" });
+    }
   }
-});
+);
 
 router.get("/getByID/:orderId", async (req, res) => {
   try {

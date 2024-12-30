@@ -55,6 +55,7 @@ export const addProduct = mutation(async ({ db }, product) => {
     discountPrice = 0, // Default 0
     status = "available", // Default "available"
     picture = "", // Default empty string
+    barcodeID = "", // Default empty string
   } = product;
 
   // Validate required fields
@@ -90,34 +91,10 @@ export const addProduct = mutation(async ({ db }, product) => {
     picture: picture?.trim() || "",
     createdAt: now,
     updatedAt: now,
+    barcodeID: barcodeID?.trim() || "",
   };
 
   return await db.insert("products", newProduct);
-});
-
-export const migrateDatesToTimestamps = mutation(async ({ db }) => {
-  const products = await db.query("products").collect();
-
-  for (const product of products) {
-    // Convert ISO string to numeric timestamp
-    const updatedAtTimestamp =
-      typeof product.updatedAt === "string"
-        ? Date.parse(product.updatedAt) // Convert ISO string to timestamp
-        : product.updatedAt;
-
-    const createdAtTimestamp =
-      typeof product.createdAt === "string"
-        ? Date.parse(product.createdAt) // Convert ISO string to timestamp
-        : product.createdAt;
-
-    // Update the database with numeric timestamps
-    await db.patch(product._id, {
-      updatedAt: updatedAtTimestamp,
-      createdAt: createdAtTimestamp,
-    });
-  }
-
-  return "Migration complete!";
 });
 
 export const searchByName = query(

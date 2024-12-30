@@ -23,6 +23,7 @@ const ProductFormModal = ({
       leadTime: 0,
       discountPrice: 0,
       status: "available",
+      barcodeID: "",
     }
   );
   const [isLoading, setIsLoading] = useState(false);
@@ -198,6 +199,19 @@ const ProductFormModal = ({
                 <option value="available">Available</option>
                 <option value="unavailable">Unavailable</option>
               </select>
+            </div>
+
+            {/* Barcode ID */}
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Barcode ID</h3>
+              <input
+                type="text"
+                name="barcodeID"
+                value={formData.barcodeID}
+                onChange={handleChange}
+                placeholder="Enter Barcode ID"
+                className="w-full px-4 py-2 border rounded-md"
+              />
             </div>
 
             {/* Submit Button */}
