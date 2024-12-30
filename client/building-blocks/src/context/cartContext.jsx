@@ -167,6 +167,10 @@ export const CartProvider = ({ children }) => {
     }, 0);
   };
 
+  const clearCart = () => {
+    setCart([]);
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -176,6 +180,7 @@ export const CartProvider = ({ children }) => {
         getMaxLeadTime,
         removeFromCart,
         updateCart,
+        clearCart,
         getNumItems,
         getTotalCost,
       }}

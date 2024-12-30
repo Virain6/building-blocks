@@ -28,8 +28,8 @@ export default defineSchema({
     custEmail: v.string(),
     custNum: v.optional(v.number()),
     custName: v.string(),
-    orderDate: v.string(),
-    pickUpDate: v.string(),
+    orderDate: v.number(),
+    pickUpDate: v.optional(v.number()),
     productsArray: v.array(
       v.object({
         productName: v.string(),

@@ -10,6 +10,7 @@ import RegisterPage from "./components/admin/register";
 import PrivateRoute from "./components/admin/privateRoute"; // Import the PrivateRoute component
 import AdminRouter from "./pages/admin/adminDashboard";
 import ProductsPage from "./pages/admin/product/productsPage"; // Import
+import OrderConfirmationPage from "./pages/orderConfirmation";
 import AdminManagement from "./pages/admin/adminManagment/adminManagmentPage";
 import ChangePassword from "./pages/admin/settings/settingsPage";
 import DepartmentManagementPage from "./pages/admin/department/departmentPage";
@@ -35,6 +36,10 @@ function App() {
               <Route path="/search" element={<ProductSearch />} />
               <Route path="/product/:productId" element={<ProductDetails />} />
               <Route path="/cart" element={<CartPage />} />
+              <Route
+                path="/order-confirmation/:orderId"
+                element={<OrderConfirmationPage />}
+              />
               <Route path="/login" element={<Login />} />{" "}
               <Route path="/register" element={<RegisterPage />} />
               {/* Public login route */}

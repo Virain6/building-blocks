@@ -6,7 +6,6 @@ import productsRoutes from "./routes/productsRoute.js";
 import usersRoutes from "./routes/usersRoute.js";
 import departmentRoutes from "./routes/departmentRoute.js";
 import orderDetailRoutes from "./routes/orderDetailsRoute.js";
-import orderItemRoutes from "./routes/orderItemsRoute.js";
 import supplierRoutes from "./routes/suppliersRoute.js";
 
 const app = express();
@@ -21,7 +20,6 @@ app.use("/products", productsRoutes);
 app.use("/users", usersRoutes);
 app.use("/department", departmentRoutes);
 app.use("/orderDetails", orderDetailRoutes);
-app.use("/orderItems", orderItemRoutes);
 app.use("/suppliers", supplierRoutes);
 
 // Test route
