@@ -16,6 +16,8 @@ import ChangePassword from "./pages/admin/settings/settingsPage";
 import DepartmentManagementPage from "./pages/admin/department/departmentPage";
 import SupplierManagementPage from "./pages/admin/supplier/supplierPage";
 import OrderManagementPage from "./pages/admin/orders/orderManagement";
+import TermsOfService from "./pages/policies/terms";
+import PrivacyPolicy from "./pages/policies/privacy";
 import { AuthProvider } from "./context/AuthContext"; // Import AuthProvider
 import { CartProvider } from "./context/cartContext";
 import { ToastContainer } from "react-toastify";
@@ -43,6 +45,8 @@ function App() {
               />
               <Route path="/login" element={<Login />} />{" "}
               <Route path="/register" element={<RegisterPage />} />
+              <Route path="/terms" element={<TermsOfService />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
               {/* Public login route */}
               {/* Protected Routes */}
               <Route

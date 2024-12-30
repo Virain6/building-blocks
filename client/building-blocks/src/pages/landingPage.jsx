@@ -35,7 +35,9 @@ const LandingPage = () => {
       </div>
 
       {/* How It Works Section */}
-      <GlowBox />
+      <div id="how-it-works">
+        <GlowBox />
+      </div>
       <div
         className="container mx-auto text-center"
         style={{ width: "calc(100vw - 3rem)" }}
@@ -55,7 +57,7 @@ const LandingPage = () => {
       </div>
 
       {/* Description Section */}
-      <div className="bg-gray-100 py-12 pt-8">
+      <div className="bg-gray-100 py-12 pt-8" id="about">
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-bold mb-6">About Us</h2>
           <p className="text-gray-700 max-w-2xl mx-auto">

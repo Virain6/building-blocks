@@ -123,7 +123,7 @@ const EditOrderModal = ({ order, onClose, onSave }) => {
                   className="border p-4 rounded-md bg-gray-100 space-y-2"
                 >
                   <p className="font-bold text-gray-700">
-                    {product.productName}
+                    {capitalizeWords(product.productName)}
                   </p>
                   <div className="flex space-x-4 items-center">
                     <div className="flex-1">

@@ -207,7 +207,7 @@ const ProductsPage = () => {
     <div className="container mx-auto p-4 sm:p-6 overflow-y-auto">
       <div className="bg-amber-500 text-white shadow-lg rounded-lg p-4 sm:p-6 mb-6">
         <div className="flex justify-between items-center mb-4">
-          <div className="flex-1 text-center">
+          <div className="flex justify-between items-center">
             <h2 className="text-2xl sm:text-3xl font-bold">Manage Products</h2>
           </div>
           <button

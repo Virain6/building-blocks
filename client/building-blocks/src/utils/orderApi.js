@@ -43,12 +43,14 @@ export const fetchOrdersWithPaginationAndSearch = async (
   cursor = null,
   limit = 10,
   search = "",
-  status
+  status,
+  supplierName = null,
+  departmentName = null
 ) => {
   console.log("Fetching orders with pagination and search..." + status); // Debug log
   try {
     const response = await axios.get("/orderDetails/search", {
-      params: { cursor, limit, search, status },
+      params: { cursor, limit, search, status, supplierName, departmentName },
     });
 
     return response.data; // Contains `results` and `nextCursor`

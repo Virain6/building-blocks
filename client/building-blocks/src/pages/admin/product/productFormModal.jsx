@@ -46,22 +46,26 @@ const ProductFormModal = ({
     e.preventDefault();
     setIsLoading(true);
     try {
+      const updatedFormData = {
+        ...formData,
+        productName: formData.productName.trim().toLowerCase(), // Convert productName to lowercase
+      };
       let savedProduct;
       let completeProduct;
       if (product) {
         // Edit existing product
-        savedProduct = await editProduct(product._id, formData);
+        savedProduct = await editProduct(product._id, updatedFormData);
         toast.success("Product updated successfully!");
         // Create a complete product object
-        completeProduct = formData;
+        completeProduct = updatedFormData;
       } else {
         // Add new product
-        savedProduct = await addProduct(formData);
+        savedProduct = await addProduct(updatedFormData);
         toast.success("Product added successfully!");
 
         // Create a complete product object
         completeProduct = {
-          ...formData, // Include form data
+          ...updatedFormData, // Include form data
           _id: savedProduct, // Ensure the correct ID is added
         };
       }

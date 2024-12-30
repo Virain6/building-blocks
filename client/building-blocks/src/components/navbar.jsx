@@ -298,7 +298,7 @@ const Navbar = () => {
                 <ul className="py-2 w-40">
                   <li>
                     <a
-                      href="/repairs"
+                      href="/#about"
                       className="block px-4 py-2 hover:bg-gray-100"
                     >
                       About
@@ -314,7 +314,7 @@ const Navbar = () => {
                   </li>
                   <li>
                     <a
-                      href="/warranty"
+                      href="/#how-it-works"
                       className="block px-4 py-2 hover:bg-gray-100"
                     >
                       How it works

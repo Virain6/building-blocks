@@ -87,7 +87,14 @@ router.put(
 
 router.get("/search", async (req, res) => {
   try {
-    const { cursor, limit = 10, search = "", status = "pending" } = req.query;
+    const {
+      cursor,
+      limit = 10,
+      search = "",
+      status = "pending",
+      supplierName = null,
+      departmentName = null,
+    } = req.query;
     const orders = await client.query(
       api.orderDetails.getOrdersWithPaginationAndSearch,
       {
@@ -95,6 +102,8 @@ router.get("/search", async (req, res) => {
         limit: parseInt(limit),
         search,
         status,
+        supplierName,
+        departmentName,
       }
     );
     res.status(200).json(orders);

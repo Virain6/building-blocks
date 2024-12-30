@@ -15,6 +15,8 @@ const OrderManagementPage = () => {
   const [search, setSearch] = useState(""); // Search term
   const [hasMore, setHasMore] = useState(true); // Flag for pagination
   const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [supplierName, setSupplierName] = useState("");
+  const [departmentName, setDepartmentName] = useState("");
 
   const fetchOrders = async (reset = false) => {
     if (isLoading || (!hasMore && !reset)) return;
@@ -28,7 +30,9 @@ const OrderManagementPage = () => {
         reset ? null : cursor,
         10, // Limit per page
         search,
-        status // Pass status to the backend
+        status, // Pass status to the backend
+        supplierName, // New filter
+        departmentName // New filter
       );
 
       if (reset) {
@@ -51,7 +55,7 @@ const OrderManagementPage = () => {
   }, [viewCompleted]);
 
   const handleSearch = () => {
-    fetchOrders(true); // Trigger search when the button is clicked
+    fetchOrders(true); // Trigger search with all filters
   };
 
   const handleMarkAsCompleted = async (orderId) => {
@@ -98,6 +102,20 @@ const OrderManagementPage = () => {
             placeholder="Search by customer name"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            className="flex-grow px-4 py-2 border text-black rounded-md"
+          />
+          <input
+            type="text"
+            placeholder="Search by supplier name"
+            value={supplierName}
+            onChange={(e) => setSupplierName(e.target.value)}
+            className="flex-grow px-4 py-2 border text-black rounded-md"
+          />
+          <input
+            type="text"
+            placeholder="Search by department name"
+            value={departmentName}
+            onChange={(e) => setDepartmentName(e.target.value)}
             className="flex-grow px-4 py-2 border text-black rounded-md"
           />
           <button

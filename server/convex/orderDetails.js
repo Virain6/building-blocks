@@ -87,12 +87,16 @@ export const completeOrder = mutation(async ({ db }, { orderId }) => {
 });
 
 export const getOrdersWithPaginationAndSearch = query(
-  async ({ db }, { cursor, limit, search, status }) => {
+  async (
+    { db },
+    { cursor, limit, search, status, supplierName, departmentName }
+  ) => {
     if (limit <= 0) {
       throw new Error("Limit must be greater than 0");
     }
 
-    let query = db.query("orderDetails").order("asc", "custName");
+    // Start by ordering by "orderDate" in descending order
+    let query = db.query("orderDetails").order("desc", "orderDate");
 
     // Apply "status" filter if provided
     if (status) {
@@ -102,15 +106,33 @@ export const getOrdersWithPaginationAndSearch = query(
     const results = await query.collect();
 
     // Apply search filtering manually (case-insensitive "starts with")
-    const filteredResults = results.filter((order) =>
+    let filteredResults = results.filter((order) =>
       search
         ? order.custName.toLowerCase().startsWith(search.toLowerCase())
         : true
     );
 
+    // Apply "supplierName" or "departmentName" filter if provided
+    if (supplierName || departmentName) {
+      filteredResults = filteredResults.filter((order) =>
+        order.productsArray.some((product) => {
+          const supplierMatch = supplierName
+            ? product.supplierName &&
+              product.supplierName.toLowerCase() === supplierName.toLowerCase()
+            : true;
+          const departmentMatch = departmentName
+            ? product.departmentName &&
+              product.departmentName.toLowerCase() ===
+                departmentName.toLowerCase()
+            : true;
+          return supplierMatch && departmentMatch;
+        })
+      );
+    }
+
     // Implement pagination manually
     const startIndex = cursor
-      ? filteredResults.findIndex((order) => order.custName === cursor) + 1
+      ? filteredResults.findIndex((order) => order.orderDate === cursor) + 1
       : 0;
 
     const paginatedResults = filteredResults.slice(
@@ -120,7 +142,7 @@ export const getOrdersWithPaginationAndSearch = query(
 
     const nextCursor =
       startIndex + limit < filteredResults.length
-        ? filteredResults[startIndex + limit - 1].custName
+        ? filteredResults[startIndex + limit - 1].orderDate
         : null;
 
     return {
