@@ -36,7 +36,11 @@ const AdminManagement = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">Admin Management</h2>
+      <div className="bg-amber-500 text-white shadow-lg rounded-lg p-4 sm:p-6 mb-6">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl sm:text-3xl font-bold">Admin Management</h2>
+        </div>
+      </div>
       {loading ? (
         <p>Loading users...</p>
       ) : (

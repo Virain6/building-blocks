@@ -67,6 +67,14 @@ const AdminRouter = () => {
                 Suppliers
               </Link>
             </li>
+            <li>
+              <Link
+                to="/admin/orders"
+                className="block px-4 py-2 rounded-md hover:bg-amber-500 transition"
+              >
+                Orders
+              </Link>
+            </li>
           </ul>
         </nav>
         <div className="p-4">

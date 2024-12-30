@@ -56,7 +56,7 @@ const ProductDetails = () => {
         </svg>
         Back
       </button>
-      <div className="flex flex-col md:flex-row gap-6">
+      <div className="flex flex-col md:flex-row gap-12">
         {/* Product Image */}
         <img
           src={product.picture || "https://via.placeholder.com/300"}
@@ -87,7 +87,8 @@ const ProductDetails = () => {
           )}
           {/* Wait Time */}
           <p className="text-lg text-gray-700 mt-6">
-            <strong>Lead Time:</strong> {product.leadTime || "Not Specified"}
+            <strong>Lead Time:</strong> {product.leadTime || "Not Specified"}{" "}
+            day(s)
           </p>
 
           {/* Status */}

@@ -15,6 +15,7 @@ import AdminManagement from "./pages/admin/adminManagment/adminManagmentPage";
 import ChangePassword from "./pages/admin/settings/settingsPage";
 import DepartmentManagementPage from "./pages/admin/department/departmentPage";
 import SupplierManagementPage from "./pages/admin/supplier/supplierPage";
+import OrderManagementPage from "./pages/admin/orders/orderManagement";
 import { AuthProvider } from "./context/AuthContext"; // Import AuthProvider
 import { CartProvider } from "./context/cartContext";
 import { ToastContainer } from "react-toastify";
@@ -60,6 +61,7 @@ function App() {
                   element={<DepartmentManagementPage />}
                 />
                 <Route path="suppliers" element={<SupplierManagementPage />} />
+                <Route path="orders" element={<OrderManagementPage />} />
               </Route>
             </Routes>
 

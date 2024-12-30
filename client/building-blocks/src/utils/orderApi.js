@@ -23,3 +23,40 @@ export const fetchOrderDetailsById = async (orderId) => {
     throw error;
   }
 };
+
+export const fetchPendingOrders = async () => {
+  const response = await axios.get("/orderDetails/pending");
+  return response.data;
+};
+
+export const fetchCompletedOrders = async () => {
+  const response = await axios.get("/orderDetails/completed");
+  return response.data;
+};
+
+export const updateOrderStatus = async (orderId, updates) => {
+  const response = await axios.put(`/orderDetails/update/${orderId}`, updates);
+  return response.data;
+};
+
+export const fetchOrdersWithPaginationAndSearch = async (
+  cursor = null,
+  limit = 10,
+  search = "",
+  status
+) => {
+  console.log("Fetching orders with pagination and search..." + status); // Debug log
+  try {
+    const response = await axios.get("/orderDetails/search", {
+      params: { cursor, limit, search, status },
+    });
+
+    return response.data; // Contains `results` and `nextCursor`
+  } catch (error) {
+    console.error(
+      "Error fetching paginated and searched orders:",
+      error.message
+    );
+    throw error;
+  }
+};

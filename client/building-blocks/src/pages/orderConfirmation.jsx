@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchOrderDetailsById } from "../utils/orderApi";
+import { capitalizeWords } from "../utils/stringUtils";
 
 const OrderConfirmationPage = () => {
   const { orderId } = useParams(); // Get the orderId from URL params
@@ -66,7 +67,7 @@ const OrderConfirmationPage = () => {
                 className="flex justify-between items-center border-b pb-4"
               >
                 <p className="text-gray-800 font-medium">
-                  {product.productName} (x{product.quantity})
+                  {capitalizeWords(product.productName)} (x{product.quantity})
                 </p>
                 <p className="text-gray-700">
                   ${(product.currentPricePerItem * product.quantity).toFixed(2)}

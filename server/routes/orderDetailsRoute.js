@@ -11,6 +11,13 @@ dotenv.config({ path: ".env.local" });
 const router = express.Router();
 const client = new ConvexHttpClient(process.env.CONVEX_URL); // Use the URL from the .env.local file
 
+function capitalizeWords(str) {
+  return str
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+}
+
 const orderLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15-minute window
   max: 5, // Limit each IP to 5 requests per window
@@ -26,6 +33,67 @@ router.get("/", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch order details" });
+  }
+});
+
+// Fetch pending orders
+router.get("/pending", async (req, res) => {
+  try {
+    const pendingOrders = await client.query(api.orderDetails.getPendingOrders);
+    res.json(pendingOrders);
+  } catch (error) {
+    console.error("Error fetching pending orders:", error.message);
+    res.status(500).json({ error: "Failed to fetch pending orders" });
+  }
+});
+
+// Fetch completed orders
+router.get("/completed", async (req, res) => {
+  try {
+    const completedOrders = await client.query(
+      api.orderDetails.getCompletedOrders
+    );
+    res.json(completedOrders);
+  } catch (error) {
+    console.error("Error fetching completed orders:", error.message);
+    res.status(500).json({ error: "Failed to fetch completed orders" });
+  }
+});
+
+// Update an order
+router.put("/update/:orderId", async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const updates = req.body;
+
+    const updatedOrder = await client.mutation(api.orderDetails.updateOrder, {
+      orderId,
+      updates,
+    });
+
+    res.status(200).json(updatedOrder);
+  } catch (error) {
+    console.error("Error updating order:", error.message);
+    res.status(500).json({ error: "Failed to update order" });
+  }
+});
+
+router.get("/search", async (req, res) => {
+  try {
+    const { cursor, limit = 10, search = "", status = "pending" } = req.query;
+    const orders = await client.query(
+      api.orderDetails.getOrdersWithPaginationAndSearch,
+      {
+        cursor,
+        limit: parseInt(limit),
+        search,
+        status,
+      }
+    );
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Error fetching paginated orders:", error.message);
+    res.status(500).json({ error: "Failed to fetch orders" });
   }
 });
 
@@ -143,14 +211,14 @@ router.post("/add", orderLimiter, async (req, res) => {
         <h1>KeyStone: Order Confirmation</h1>
       </div>
       <div class="content">
-        <p>Dear ${order.custName},</p>
+        <p>Dear ${capitalizeWords(order.custName)},</p>
         <p>Thank you for your order! Here are the details:</p>
         <div class="order-id">Order ID: ${newOrder}</div>
         <ul class="product-list">
           ${order.productsArray
             .map(
               (product) =>
-                `<li>${product.productName} (x${product.quantity}) - <span>$${(
+                `<li>${capitalizeWords(product.productName)} (x${product.quantity}) - <span>$${(
                   product.currentPricePerItem * product.quantity
                 ).toFixed(2)}</span></li>`
             )

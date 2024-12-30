@@ -54,3 +54,75 @@ export const getById = query(async ({ db }, { id }) => {
   }
   return order;
 });
+
+// Fetch all pending orders
+export const getPendingOrders = query(async ({ db }) => {
+  return await db
+    .query("orderDetails")
+    .filter((q) => q.eq(q.field("status"), "pending"))
+    .collect();
+});
+
+// Fetch all completed orders
+export const getCompletedOrders = query(async ({ db }) => {
+  return await db
+    .query("orderDetails")
+    .filter((q) => q.eq(q.field("status"), "completed"))
+    .collect();
+});
+
+// Update an order
+export const updateOrder = mutation(async ({ db }, { orderId, updates }) => {
+  await db.patch(orderId, updates);
+  const updatedOrder = await db.get(orderId); // Fetch the updated order
+  return updatedOrder; // Return the updated order
+});
+
+// Mark an order as completed
+export const completeOrder = mutation(async ({ db }, { orderId }) => {
+  await db.patch(orderId, { status: "completed" });
+});
+
+export const getOrdersWithPaginationAndSearch = query(
+  async ({ db }, { cursor, limit, search, status }) => {
+    if (limit <= 0) {
+      throw new Error("Limit must be greater than 0");
+    }
+
+    let query = db.query("orderDetails").order("asc", "custName");
+
+    // Apply "status" filter if provided
+    if (status) {
+      query = query.filter((q) => q.eq(q.field("status"), status));
+    }
+
+    const results = await query.collect();
+
+    // Apply search filtering manually (case-insensitive "starts with")
+    const filteredResults = results.filter((order) =>
+      search
+        ? order.custName.toLowerCase().startsWith(search.toLowerCase())
+        : true
+    );
+
+    // Implement pagination manually
+    const startIndex = cursor
+      ? filteredResults.findIndex((order) => order.custName === cursor) + 1
+      : 0;
+
+    const paginatedResults = filteredResults.slice(
+      startIndex,
+      startIndex + limit
+    );
+
+    const nextCursor =
+      startIndex + limit < filteredResults.length
+        ? filteredResults[startIndex + limit - 1].custName
+        : null;
+
+    return {
+      results: paginatedResults,
+      nextCursor,
+    };
+  }
+);
