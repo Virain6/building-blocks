@@ -8,7 +8,7 @@ export default defineSchema({
     description: v.string(),
     discountPrice: v.float64(),
     leadTime: v.float64(),
-    picture: v.string(),
+    picture: v.optional(v.string()),
     price: v.float64(),
     productName: v.string(),
     status: v.string(),
