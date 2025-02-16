@@ -120,14 +120,16 @@ router.post(
   isAdminMiddleware, // Ensure user is admin
   async (req, res) => {
     try {
-      const order = req.body;
+      let order = req.body;
+      order.totalPrice = parseFloat(order.totalPrice);
+      console.log("Order received:", order);
 
       // Basic validation
       if (
         !order.custEmail ||
         !order.custName ||
         !order.productsArray ||
-        !order.totalPrice
+        isNaN(order.totalPrice)
       ) {
         return res.status(400).json({
           error:

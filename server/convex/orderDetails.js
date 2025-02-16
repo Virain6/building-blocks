@@ -37,7 +37,7 @@ export const addOrder = mutation(async ({ db }, order) => {
       departmentName: product.departmentName || "Unknown Department",
       barcodeID: product.barcodeID || "N/A",
     })),
-    totalPrice,
+    totalPrice: parseFloat(totalPrice),
     status: "pending", // Default status
   };
 
